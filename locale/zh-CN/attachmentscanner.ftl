@@ -16,7 +16,7 @@ attachmentscanner-remove-pubmed-entry =
 
 attachmentscanner-section-tags = 含非常规附件的条目标签
 
-attachmentscanner-section-tags-desc = 以下标签如被修改，在本视窗被关闭后或开始扫描前，所有含该标签的条目将被更新。
+attachmentscanner-section-tags-desc = 以下标签如被修改，在焦点离开本视窗后或开始扫描前，所有含该标签的条目将被更新。
 
 attachmentscanner-tag-nosource = 条目没有附件:
 

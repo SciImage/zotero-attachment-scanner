@@ -16,7 +16,7 @@ attachmentscanner-remove-pubmed-entry =
 
 attachmentscanner-section-tags = Tags for items with unusual attachments
 
-attachmentscanner-section-tags-desc = If modified, items with the old tags will be updated after you close this window or start a scan.
+attachmentscanner-section-tags-desc = If modified, items with the old tags will be updated after you leave this window or start a scan.
 
 attachmentscanner-tag-nosource = No attachment:
 

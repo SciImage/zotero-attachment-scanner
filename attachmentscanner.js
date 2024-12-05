@@ -80,7 +80,7 @@ AttachmentScanner.addToWindow = function(window) {
 
 // Handling the preference window; prevent changing when scanning/renaming is ongoing
 
-AttachmentScanner.onPreferenceWindowClose = function(doc) {
+AttachmentScanner.onPreferenceWindowLoseFocus = function(doc) {
     log("Preference window closed");
     const [_tagNosource, _tagBroken, _tagDuplicate, _tagNonfile] = this.updatePreferences(doc);
     this.renameTagsTo(_tagNosource, _tagBroken, _tagDuplicate, _tagNonfile);
