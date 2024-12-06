@@ -1,4 +1,4 @@
-# Attachment Scanner (for Zotero v.70)
+# Attachment Scanner (for Zotero v.7.0+)
 **Attachment Scanner** is a **[Zotero](https://www.zotero.org/)** plugin designed to scan attachments and add tags to items with no, missing, or duplicate attachments. It functions similarly to the **[Zotero Storage Scanner](https://github.com/retorquere/zotero-storage-scanner)** plugin but is compatible with Zotero v.7.0.
 
 ## Plugin Functions and Features
