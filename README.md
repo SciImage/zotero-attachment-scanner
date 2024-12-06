@@ -22,4 +22,4 @@
 ## Usage
 1. Start scanning by selecting the “Scan attachments” menu item in the “Tools” menu.
 2. Change options and tags in Zotero’s settings window. These settings become read-only during scanning but revert to normal once scanning is complete.
-<p align="center" width="100%">![Preference window](preference.png?raw=true)</p>
+![Preference window](/preference.png?raw=true "Preference window")
