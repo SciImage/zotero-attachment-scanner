@@ -4,6 +4,7 @@
     "version": "0.1.0",
     "description": "Plugin for scanning items with no, broken, and duplicate attachments",
     "author": "Wakam Chang",
+    "homepage_url": "https://github.com/SciImage/zotero-attachment-scanner",
     "icons": {
       "48": "skin/icon.png",
       "96": "skin/icon@2x.png"
@@ -11,9 +12,8 @@
     "applications": {
         "zotero": {
             "id": "attachmentscanner@changlab.um.edu.mo",
-            "update_url": "https://changlab.um.edu.mo/attachmentscanner/xx-updates-xx.json",
+            "update_url": "https://raw.githubusercontent.com/SciImage/zotero-attachment-scanner/main/others/update.json",
             "strict_min_version": "6.999",
-            "strict_max_version": "7.0.*"
         }
     }
 }
