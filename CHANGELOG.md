@@ -1,9 +1,6 @@
 # Attachment Scanner Change log
 
-## 0.5.0
-- Find orphan files
-
-## 0.2.0
+## 0.2.0, 2024-12-11
 - Add a option to disable real-time monitoring
 - Add a popup menu item to scan only selected items
 - Add a menuitem to cancel a scan
