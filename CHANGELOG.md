@@ -1,9 +1,9 @@
 # Attachment Scanner Change log
 
 ## 0.2.0, 2024-12-11
-- Add a option to disable real-time monitoring
+- Add an option to disable real-time monitoring
 - Add a popup menu item to scan only selected items
-- Add a menuitem to cancel a scan
+- Add a menu item to cancel a scan
 - Add an icon to menu items and the progress window
 
 ## 0.1.0 (first release), 2024-12-06
