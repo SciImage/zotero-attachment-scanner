@@ -1,7 +1,13 @@
 attachmentscanner-prefs-title = 附件管理
 
 attachmentscanner-start-scan =
-    .label = 开始扫描附件
+    .label = 扫描所有附件
+
+attachmentscanner-start-scan-selected =
+    .label = 扫描已选条目的附件
+
+attachmentscanner-cancel-scan =
+    .label = 取消附件扫描
 
 attachmentscanner-section-options = 选项
 
@@ -13,6 +19,9 @@ attachmentscanner-scan-nonfiles =
 
 attachmentscanner-remove-pubmed-entry =
     .label = 移除所有 "PubMed entry" 附件
+
+attachmentscanner-monitor-change =
+    .label = 附件變化時，自動更新条目的标签
 
 attachmentscanner-section-tags = 含非常规附件的条目标签
 

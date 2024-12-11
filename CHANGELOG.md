@@ -1,0 +1,22 @@
+# Attachment Scanner Change log
+
+## 0.5.0
+- Find orphan files
+
+## 0.2.0
+- Add a option to disable real-time monitoring
+- Add a popup menu item to scan only selected items
+- Add a menuitem to cancel a scan
+- Add an icon to menu items and the progress window
+
+## 0.1.0 (first release), 2024-12-06
+- Scan all attachments and:
+  - Add tags to items with no attachment
+  - Add tags to items with any missing attachments
+  - Optionally, add tags to items with duplicate attachments of the same type
+  - Optionally, add tags to items with non-file attachments
+  - Optionally, remove all “PubMed entry” attachments
+- Customizable tags: You can use any tags; three predefined sets of tags are available with a click.
+- Tag updating: Customization applies to all existing tags without rescanning.
+- Progress tracking: The scanning progress is displayed in a window.
+- Real-time monitoring: Adding or deleting attachments triggers automatic tag updates.

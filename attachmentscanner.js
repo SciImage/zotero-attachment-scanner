@@ -9,6 +9,7 @@ const prefs_Nonfile    = "tag_nonfile";
 const prefs_ScanDuplicate      = "scan_duplicates";
 const prefs_ScanNonfile        = "scan_nonfiles";
 const prefs_RemovePubMedEntry  = "remove_pubmed_entry";
+const prefs_MonitorAttachments = "monitor_attachments";
 
 const zssTag_Nosource  = "#nosource";
 const zssTag_Broken    = "#broken_attachments";
@@ -23,102 +24,89 @@ const emoTag_Broken    = "🚫 broken";
 const emoTag_Duplicate = "‼️ duplicate";
 const emoTag_Nonfile   = "❓ nonfile";
 
-useLog = true;
+useLog = false;
+
+// === Setting up
 
 AttachmentScanner.init = function({ id, version, rootURI }) {
     this.scanningState = 0;     // 0: no; 1: renaming tags; 2: scaning
 
-    this.scanDuplicate     = this.getPref(prefs_ScanDuplicate);
-    this.scanNonfile       = this.getPref(prefs_ScanNonfile);
-    this.removePubmedEntry = this.getPref(prefs_RemovePubMedEntry);
+    this.scanDuplicate      = this.getPref(prefs_ScanDuplicate);
+    this.scanNonfile        = this.getPref(prefs_ScanNonfile);
+    this.removePubmedEntry  = this.getPref(prefs_RemovePubMedEntry);
+    this.monitorAttachments = this.getPref(prefs_MonitorAttachments);
+    this.setItemMonitor(this.monitorAttachments);
 
-    this.tagNosource = this.getPref(prefs_Nosource)?.trim();
-    if (!this.tagNosource) {
-        this.tagNosource = simTag_Nosource;
-        this.setPref(prefs_Nosource, this.tagNosource);
-    }
-    this.tagBroken = this.getPref(prefs_Broken)?.trim();
-    if (!this.tagBroken) {
-        this.tagBroken = simTag_Broken;
-        this.setPref(prefs_Broken, this.tagBroken);
-    }
-    this.tagDuplicate = this.getPref(prefs_Duplicate)?.trim();
-    if (!this.tagDuplicate) {
-        this.tagDuplicate = simTag_Duplicate;
-        this.setPref(zssTag_Duplicate, this.tagDuplicate);
-    }
-    this.tagNonfile = this.getPref(prefs_Nonfile)?.trim();
-    if (!this.tagNonfile) {
-        this.tagNonfile = simTag_Nonfile;
-        this.setPref(zssTag_Nonfile, this.tagNonfile);
-    }
+    this.tagNosource  = this.getPrefNonEmpty (prefs_Nosource,  simTag_Nosource);
+    this.tagBroken    = this.getPrefNonEmpty (prefs_Broken,    simTag_Broken);
+    this.tagDuplicate = this.getPrefNonEmpty (prefs_Duplicate, simTag_Duplicate);
+    this.tagNonfile   = this.getPrefNonEmpty (prefs_Nonfile,   simTag_Nonfile);
 
-    // type info from xpcom/data/cachedTypes.js
     this.hiddenTypeIDs = [];
     this.hiddenTypeIDs.push(Zotero.ItemTypes.getID("webpage"));
     this.hiddenTypeIDs.push(Zotero.ItemTypes.getID("attachment"));
     this.hiddenTypeIDs.push(Zotero.ItemTypes.getID("note"));
     this.hiddenTypeIDs.push(Zotero.ItemTypes.getID("annotation"));
-
-    this.sqlAllItems = "SELECT itemID FROM items WHERE itemTypeID NOT IN (" + this.hiddenTypeIDs.toString() + ")";
+    this.sqlAllItems = `SELECT itemID FROM items WHERE itemTypeID NOT IN (${this.hiddenTypeIDs.toString()})`;
 }
 
 AttachmentScanner.addToWindow = function(window) {
-    let doc = window.document;
-
-    // Add menu option
-    let menuitem = doc.createXULElement("menuitem");
-    menuitem.id = "attachment-scanner-scan";
-    menuitem.setAttribute("data-l10n-id", "attachmentscanner-start-scan");
-    menuitem.addEventListener("command", () => {
-        AttachmentScanner.startScan(window);
-    });
-    doc.getElementById("menu_ToolsPopup").appendChild(menuitem);
-    this.storeCreatedElement(menuitem);
-    // doc.getElementById("zotero-itemmenu").appendChild(menuitem);
+    this.setItemMonitor(this.monitorAttachments);
+    const appIcon = `${this.rootURI}skin/attachscan${(Zotero.hiDPI ? "@2x" : "")}.png`;
+    this.addMenuItem(window, "menu_ToolsPopup", "attachment-scanner-scan",
+        "attachmentscanner-start-scan", appIcon, {}, () => {
+            AttachmentScanner.startScan(window);
+        });
+    this.addMenuItem(window, "menu_ToolsPopup", "attachment-scanner-cancel",
+        "attachmentscanner-cancel-scan", appIcon, {hidden: true}, () => {
+            AttachmentScanner.cancelScan(window);
+        });
+    this.addMenuItem(window, "zotero-itemmenu", "attachment-scanner-scan-selected",
+        "attachmentscanner-start-scan-selected", appIcon, {}, () => {
+            AttachmentScanner.startScanSelected(window);
+        });
+    // On Mac, when the Zotero window is close and reopen, some main menu items lose icons (or disappear)
+    // This fix it
+    setTimeout(() => {
+      this.toggleMenuItems(window, this.scanningState < 2);
+      this.toggleMenuItems(window, this.scanningState >= 2);
+    }, "200");
 }
 
-// Handling the preference window; prevent changing when scanning/renaming is ongoing
-
-AttachmentScanner.onPreferenceWindowLoseFocus = function(doc) {
-    log("Preference window closed");
-    const [_tagNosource, _tagBroken, _tagDuplicate, _tagNonfile] = this.updatePreferences(doc);
-    this.renameTagsTo(_tagNosource, _tagBroken, _tagDuplicate, _tagNonfile);
-}
+// === Handling the preference window; prevent changing when scanning/renaming is ongoing
 
 AttachmentScanner.onPreferenceWindowOpen = function(doc) {
-    this.setPreferenceWindowReadonly(doc, this.scanningState > 0);
+    this.disablePreferenceItems(this.scanningState > 0);
 }
 
 AttachmentScanner.onPreferenceWindowFocus = function(doc) {
-    this.setPreferenceWindowReadonly(doc, this.scanningState > 0);
+    this.disablePreferenceItems(this.scanningState > 0);
 }
 
-AttachmentScanner.setPreferenceWindowReadonly = function(doc, readOnly) {
-    let elm;
-    elm = doc.getElementById("attachmentscanner_checkbox1");
-    if (elm) elm.disabled = readOnly;
-    elm = doc.getElementById("attachmentscanner_checkbox2");
-    if (elm) elm.disabled = readOnly;
-    elm = doc.getElementById("attachmentscanner_checkbox3");
-    if (elm) elm.disabled = readOnly;
-
-    elm = doc.getElementById(elmId_Nosource);
-    if (elm) elm.readOnly = readOnly;
-    elm = doc.getElementById(elmId_Broken);
-    if (elm) elm.readOnly = readOnly;
-    elm = doc.getElementById(elmId_Duplicate);
-    if (elm) elm.readOnly = readOnly;
-    elm = doc.getElementById(elmId_Nonfile);
-    if (elm) elm.readOnly = readOnly;
-
-    elm = doc.getElementById("attachmentscanner_tags1");
-    if (elm) elm.disabled = readOnly;
-    elm = doc.getElementById("attachmentscanner_tags2");
-    if (elm) elm.disabled = readOnly;
-    elm = doc.getElementById("attachmentscanner_tags3");
-    if (elm) elm.disabled = readOnly;
+AttachmentScanner.onPreferenceWindowLoseFocus = function(doc) {
+    this.preferencesChanged();
 }
+
+AttachmentScanner.disablePreferenceItems = function(disabled) {
+    let doc = this.preferenceDocument;
+    if (doc) {
+        doc.getElementById("attachmentscanner_checkbox1").disabled = disabled;
+        doc.getElementById("attachmentscanner_checkbox2").disabled = disabled;
+        doc.getElementById("attachmentscanner_checkbox3").disabled = disabled;
+        doc.getElementById("attachmentscanner_checkbox4").disabled = disabled;
+
+        doc.getElementById(elmId_Nosource).disabled  = disabled;
+        doc.getElementById(elmId_Broken).disabled    = disabled;
+        doc.getElementById(elmId_Duplicate).disabled = disabled;
+        doc.getElementById(elmId_Nonfile).disabled   = disabled;
+
+        doc.getElementById("attachmentscanner_tags1").disabled = disabled;
+        doc.getElementById("attachmentscanner_tags2").disabled = disabled;
+        doc.getElementById("attachmentscanner_tags3").disabled = disabled;
+    }
+}
+
+// === Button click in the preference window
 
 AttachmentScanner.useTags = function(doc, tagNosource, tagBroken, tagDuplicate, tagNonfile) {
     doc.getElementById(elmId_Nosource).value  = tagNosource;
@@ -132,66 +120,47 @@ AttachmentScanner.useTags = function(doc, tagNosource, tagBroken, tagDuplicate, 
 }
 
 AttachmentScanner.useZssTags = function(doc) {
-    log("Use tags in the Zotero Attachment Scanner Plugin");
     this.useTags(doc, zssTag_Nosource, zssTag_Broken, zssTag_Duplicate, zssTag_Nonfile);
-};
-
-AttachmentScanner.useSimpleTags = function(doc) {
-    log("Use simple tags");
-    this.useTags(doc, simTag_Nosource, simTag_Broken, simTag_Duplicate, simTag_Nonfile);
-};
-
-AttachmentScanner.useEmojiTags = function(doc) {
-    log("Use Emoji tags");
-    this.useTags(doc, emoTag_Nosource, emoTag_Broken, emoTag_Duplicate, emoTag_Nonfile);
-};
-
-AttachmentScanner.updatePreferences = function(doc) {
-    log(`This: Nosource: ${this.tagNosource}; Broken: ${this.tagBroken}; Duplicate: ${this.tagDuplicate}; Nonfile: ${this.tagNonfile}`);
-    log(`Pref: Nosource: ${this.getPref(prefs_Nosource)}; Broken: ${this.getPref(prefs_Broken)}; Duplicate: ${this.getPref(prefs_Duplicate)}; Nonfile: ${this.getPref(prefs_Nonfile)}`);
-    log(`Elms: Nosource: ${doc.getElementById(elmId_Nosource).value}; Broken: ${doc.getElementById(elmId_Broken).value}; Duplicate: ${doc.getElementById(elmId_Duplicate).value}; Nonfile: ${doc.getElementById(elmId_Nonfile).value}`);
-    this.scanDuplicate     = this.getPref(prefs_ScanDuplicate);
-    this.scanNonfile       = this.getPref(prefs_ScanNonfile);
-    this.removePubmedEntry = this.getPref(prefs_RemovePubMedEntry);
-
-    let elm = doc.getElementById(elmId_Nosource);
-    let _tagNosource  = elm.value.trim();
-    if (_tagNosource == "") _tagNosource = simTag_Nosource;
-    if (_tagNosource  != elm.value) {
-        elm.value = _tagNosource;
-        this.setPref(prefs_Nosource, _tagNosource);
-    }
-
-    elm = doc.getElementById(elmId_Broken);
-    let _tagBroken    = elm.value.trim();
-    if (_tagBroken == "") _tagBroken = simTag_Broken;
-    if (_tagBroken    != elm.value) {
-        elm.value = _tagBroken;
-        this.setPref(prefs_Broken, _tagBroken);
-    }
-
-    elm = doc.getElementById(elmId_Duplicate);
-    let _tagDuplicate = elm.value.trim();
-    if (_tagDuplicate == "") _tagDuplicate = simTag_Duplicate;
-    if (_tagDuplicate != elm.value) {
-        elm.value = _tagDuplicate;
-        this.setPref(prefs_Duplicate, _tagDuplicate);
-    }
-
-    elm = doc.getElementById(elmId_Nonfile);
-    let _tagNonfile = elm.value.trim();
-    if (_tagNonfile == "") _tagNonfile = simTag_Nonfile;
-    if (_tagNonfile != elm.value) {
-        elm.value = _tagNonfile;
-        this.setPref(prefs_Nonfile, _tagNonfile);
-    }
-    return [_tagNosource, _tagBroken, _tagDuplicate, _tagNonfile];
 }
 
-AttachmentScanner.renameTagsTo = async function(_tagNosource, _tagBroken, _tagDuplicate, _tagNonfile) {
+AttachmentScanner.useSimpleTags = function(doc) {
+    this.useTags(doc, simTag_Nosource, simTag_Broken, simTag_Duplicate, simTag_Nonfile);
+}
+
+AttachmentScanner.useEmojiTags = function(doc) {
+    this.useTags(doc, emoTag_Nosource, emoTag_Broken, emoTag_Duplicate, emoTag_Nonfile);
+}
+
+// === Rename tags if the preferences is changed
+
+AttachmentScanner.getTagFromPreferenceWindow = function(elmID, prefID, defaulTag) {
+    let elm = this.preferenceDocument.getElementById(elmID);
+    let value = elm.value.trim();
+    if (value == "") value = defaulTag;
+    if (value != elm.value) {
+        elm.value = value;
+        this.setPref(prefID, value);
+    }
+    return value;
+}
+
+AttachmentScanner.preferencesChanged = function() {
+    // Don't rely on items in preference windows, the user can use config editor to change the settings
+    this.scanDuplicate      = this.getPref(prefs_ScanDuplicate);
+    this.scanNonfile        = this.getPref(prefs_ScanNonfile);
+    this.removePubmedEntry  = this.getPref(prefs_RemovePubMedEntry);
+    this.monitorAttachments = this.getPref(prefs_MonitorAttachments);
+
+    _tagNosource  = this.getTagFromPreferenceWindow(elmId_Nosource,  prefs_Nosource,  simTag_Nosource);
+    _tagBroken    = this.getTagFromPreferenceWindow(elmId_Broken,    prefs_Broken,    simTag_Broken);
+    _tagDuplicate = this.getTagFromPreferenceWindow(elmId_Duplicate, prefs_Duplicate, simTag_Duplicate);
+    _tagNonfile   = this.getTagFromPreferenceWindow(elmId_Nonfile,   prefs_Nonfile,   simTag_Nonfile);
+
     if (this.scanningState != 0) return;
+    if (this.tagNosource == _tagNosource   && this.tagBroken == _tagBroken &&
+        this.tagDuplicate == _tagDuplicate && this.tagNonfile == _tagNonfile) return;
     this.scanningState = 1;
-    log("Renaming tags");
+    log("Renaming tags if");
 
     if (this.tagNosource  != _tagNosource) {
         if (Zotero.Tags.getID(this.tagNosource))
@@ -218,24 +187,52 @@ AttachmentScanner.renameTagsTo = async function(_tagNosource, _tagBroken, _tagDu
     log("Tags renamed");
 };
 
+// === Attachment monitor
+
+AttachmentScanner.setItemMonitor = function(enabled) {
+    log('Set attachment monitor to ' + enabled);
+    if (enabled && !this.itemNotifierID)
+        this.itemNotifierID = Zotero.Notifier.registerObserver(this.onItemChange, ['item']);
+    else if (!enabled && this.itemNotifierID) {
+        Zotero.Notifier.unregisterObserver(pluginObj.itemNotifierID);
+        this.itemNotifierID = undefined;
+    }
+}
+
+// === Scanning commands
+
+AttachmentScanner.toggleMenuItems = function(win, scanning) {
+    let doc = win.document;
+    doc.getElementById("attachment-scanner-scan").disabled = scanning;
+    doc.getElementById("attachment-scanner-scan-selected").disabled = scanning;
+    doc.getElementById("attachment-scanner-cancel").hidden = !scanning;
+}
+
 AttachmentScanner.startScan = async function(win) {
     if (this.scanningState > 1) {
         log("Scanning is ongoing")
         return;
     }
+    const items = await Zotero.DB.queryAsync(this.sqlAllItems) || [];
+    this.scanItems(win, items);
+}
 
-    // prepare and create the progress window
-    progressTitle = await this.getString("attachmentscanner-scan-title");
-    progressInfo  = await this.getString("attachmentscanner-scan-progreess");
-    progressWait  = await this.getString("attachmentscanner-scan-renamewait");
+AttachmentScanner.startScanSelected = async function(win) {
+    if (this.scanningState > 1) {
+        log("Scanning is ongoing")
+        return;
+    }
+    const items = Zotero.getActiveZoteroPane().getSelectedItems();
+    this.scanItems(win, items);
+}
 
-    this.progressWindow = new Zotero.ProgressWindow({closeOnClick: false});
-    let winIcon = "chrome://zotero/skin/toolbar-advanced-search" + (Zotero.hiDPI ? "@2x" : "") + ".png";
-    this.progressWindow.changeHeadline(progressTitle, winIcon);
-    let appIcon = this.rootURI + "skin/attachscan" + (Zotero.hiDPI ? "@2x" : "") + ".png";
-    this.progressWindow.progress = new this.progressWindow.ItemProgress(appIcon, "Scanning");
-    this.progressWindow.show();
+AttachmentScanner.cancelScan = async function(win) {
+    this.shouldCancelScan = true;
+}
 
+// === Actual Scanning
+
+AttachmentScanner.scanItems = async function(win, items) {
     // if there is a renaming operation, wait until it finishes
     if (this.scanningState == 1) {
         this.progressWindow.progress.setText(progressWait);
@@ -244,29 +241,72 @@ AttachmentScanner.startScan = async function(win) {
     }
 
     // Check if renaming is needed, this happens if the preference window is not closed
-    if (this.preferenceDocument) {
-        this.setPreferenceWindowReadonly(this.preferenceDocument, true);
-        const [_tagNosource, _tagBroken, _tagDuplicate, _tagNonfile] = this.updatePreferences(this.preferenceDocument);
-        this.progressWindow.progress.setText(progressWait);
-        this.renameTagsTo(_tagNosource, _tagBroken, _tagDuplicate, _tagNonfile);
-    }
+    if (this.preferenceDocument) this.preferencesChanged();
 
-    // Now, scanning starts
+    // Disable/enable some functions
     this.scanningState = 2;
+    this.disablePreferenceItems(true);
+    this.toggleMenuItems(win, true);
+    this.shouldCancelScan = false;
     log("Start scan");
 
-    // Get all items
-    const items = await Zotero.DB.queryAsync(this.sqlAllItems) || [];
+    progressTitle = await this.getString("attachmentscanner-scan-title");
+    progressInfo  = await this.getString("attachmentscanner-scan-progreess");
+    progressWait  = await this.getString("attachmentscanner-scan-renamewait");
+
+    // prepare and create the progress window
+    this.progressWindow = new Zotero.ProgressWindow({closeOnClick: false});
+    this.progressWindow.changeHeadline("", "attachmentScanner", progressTitle);
+    // The first icon argument is important, or no progression will be shown.
+    this.progressWindow.progress = new this.progressWindow.ItemProgress("", "Scanning"); // note is a csskey that exist
+    this.progressWindow.progress.setProgress(0.1);  // to avoid position moving
+    this.progressWindow.show();
     let index = 0;
     let rate = Math.max(1, Math.round(items.length / 400));
 
+    // ******** HACK ********
+    // The implementation of the ProgressWindow has many issues, a few are listed here:
+    //   1: The icon parameters of both changeHeadline() and ItemProgress are cssIconKey, making it impossible to use
+    //      custom icons and sensitive to changes in Zotero's css definitions
+    //   2: The cssIconKeys used by changeHeadline() and ItemProgress are different!!!!
+    //   3: When the first parameter of changeHeadline() is empty, an ugly space is added.
+    //   4: ItemProgress shouldn't accept an icon, because the graph is used to shown the progress.
+    //      When the progress is abour 100, the progrssion disappear and become the icon. It is weired.
+    //   5: When the progress is [97.5, 100) the progrssion image is same as progress is 0.
+    // Here, I
+    //   1: Injected a style to make the icon show in the headline
+    //   2: Remove the empty node before the icon
+    //   3: Make the progress is between [0, 97.5)
+    let styleInjected = false;
+    let realRate = rate;        // to refresh more
+    rate = 1;
+    // ******** HACK ********
+
     // Check each items
     for (const aItem of items) {
+        if (this.shouldCancelScan) break;
         // Update the progress window, less frequently
         if (index % rate == 0) {
             let s = progressInfo.replaceAll("${total}", items.length).replaceAll("${index}", index + 1);
-            this.progressWindow.progress.setProgress(Math.round(100 * index / items.length));
+            // when the percentage is close to 100%,
+            this.progressWindow.progress.setProgress(Math.round(97.4 * index / items.length)); // not 100, just 97.4
             this.progressWindow.progress.setText(s);
+
+            // ******** HACK ********
+            if (!styleInjected && this.progressWindow.progress._image) {
+                const styleText = (Zotero.hiDPI) ? `.icon-attachmentScanner {background: url("${this.rootURI}skin/attachscan@2x.png") no-repeat content-box; background-size: 16px;}`
+                                                 : `.icon-attachmentScanner {background: url("${this.rootURI}skin/attachscan.png") no-repeat content-box;}`;
+                const doc = this.progressWindow.progress._image.ownerDocument;
+                const sheet = doc.styleSheets[0];
+                sheet.insertRule(styleText, sheet.cssRules.length);
+                const headLine = doc.getElementById("zotero-progress-text-headline");
+                if (headLine && headLine.children[0] && headLine.children[0].tagName == "label" &&
+                    headLine.children[0].innerHTML == "")
+                  headLine.children[0].hidden = true;
+                styleInjected = true;
+                rate = realRate;
+            } else if (rate < realRate) rate ++;
+            // ******** HACK ********
         }
         index++;
 
@@ -280,9 +320,11 @@ AttachmentScanner.startScan = async function(win) {
     log("Clean up scan");
     this.progressWindow.close();
     this.scanningState = 0;
-    if (this.preferenceDocument)
-        this.setPreferenceWindowReadonly(this.preferenceDocument, false);
+    this.toggleMenuItems(win, false);
+    this.disablePreferenceItems(false);
 }
+
+// === Actual item checking
 
 AttachmentScanner.checkAttachements = async function(item) {
     // Get all
@@ -339,7 +381,7 @@ AttachmentScanner.onItemChange = {
             for (id of ids) {
                 let item = await Zotero.Items.getAsync(id);
                 await item.loadAllData();
-                if (item.isAttachment()) { //isRegularItem
+                if (item.isAttachment()) {
                     item = await Zotero.Items.getAsync(item.parentID);
                     await item.loadAllData();
                 }
@@ -349,10 +391,3 @@ AttachmentScanner.onItemChange = {
         }
     }
 }
-
-
-
-
-
-
-

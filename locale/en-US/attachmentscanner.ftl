@@ -1,7 +1,13 @@
 attachmentscanner-prefs-title = Attachments
 
 attachmentscanner-start-scan =
-    .label = Scan Attachments
+    .label = Scan All Attachments
+
+attachmentscanner-start-scan-selected =
+    .label = Scan Attachments of Selected Items
+
+attachmentscanner-cancel-scan =
+    .label = Cancel Attachment Scanning
 
 attachmentscanner-section-options = Options
 
@@ -13,6 +19,9 @@ attachmentscanner-scan-nonfiles =
 
 attachmentscanner-remove-pubmed-entry =
     .label = Remove all "PubMed entry" attachments
+
+attachmentscanner-monitor-change =
+    .label = Monitor attachments and update tags
 
 attachmentscanner-section-tags = Tags for items with unusual attachments
 
