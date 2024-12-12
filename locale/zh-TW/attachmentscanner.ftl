@@ -1,21 +1,21 @@
 attachmentscanner-prefs-title = 附件管理
 
-attachmentscanner-start-scan =
-    .label = 掃描所有附件
+attachmentscanner-start-scan = 掃描所有附件
 
-attachmentscanner-start-scan-selected =
-    .label = 掃描已選項目的附件
+attachmentscanner-start-scan-selected = 掃描已選項目的附件
 
-attachmentscanner-cancel-scan =
-    .label = 取消附件掃描
+attachmentscanner-cancel-scan = 取消附件掃描
 
 attachmentscanner-section-options = 選項
+
+attachmentscanner-scan-nosource =
+    .label = 為沒有文檔類附件的項目加上標籤
 
 attachmentscanner-scan-duplicates =
     .label = 檢查項目是否含有多個同類附件
 
 attachmentscanner-scan-nonfiles =
-    .label = 检查条目是否含有非文件类附件
+    .label = 檢查項目是否含有非文檔類附件
 
 attachmentscanner-remove-pubmed-entry =
     .label = 刪除所有 "PubMed entry" 附件

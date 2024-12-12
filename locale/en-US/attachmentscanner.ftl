@@ -1,15 +1,15 @@
 attachmentscanner-prefs-title = Attachments
 
-attachmentscanner-start-scan =
-    .label = Scan All Attachments
+attachmentscanner-start-scan = Scan All Attachments
 
-attachmentscanner-start-scan-selected =
-    .label = Scan Attachments of Selected Items
+attachmentscanner-start-scan-selected = Scan Attachments of Selected Items
 
-attachmentscanner-cancel-scan =
-    .label = Cancel Attachment Scanning
+attachmentscanner-cancel-scan = Cancel Attachment Scanning
 
 attachmentscanner-section-options = Options
+
+attachmentscanner-scan-nosource =
+    .label = Tag items without file attachment
 
 attachmentscanner-scan-duplicates =
     .label = Scan items for duplicate same-type attachments

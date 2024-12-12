@@ -1,15 +1,15 @@
 attachmentscanner-prefs-title = 附件管理
 
-attachmentscanner-start-scan =
-    .label = 扫描所有附件
+attachmentscanner-start-scan = 扫描所有附件
 
-attachmentscanner-start-scan-selected =
-    .label = 扫描已选条目的附件
+attachmentscanner-start-scan-selected = 扫描已选条目的附件
 
-attachmentscanner-cancel-scan =
-    .label = 取消附件扫描
+attachmentscanner-cancel-scan = 取消附件扫描
 
 attachmentscanner-section-options = 选项
+
+attachmentscanner-scan-nosource =
+    .label = 为没有文件类附件的条目加上标签
 
 attachmentscanner-scan-duplicates =
     .label = 检查条目是否含有多个同类附件

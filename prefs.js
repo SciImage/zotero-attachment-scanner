@@ -1,3 +1,4 @@
+ pref("extensions.attachmentscanner.scan_nosource", true);
  pref("extensions.attachmentscanner.scan_duplicates", true);
  pref("extensions.attachmentscanner.scan_nonfiles", false);
  pref("extensions.attachmentscanner.remove_pubmed_entry", false);

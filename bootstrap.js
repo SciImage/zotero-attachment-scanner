@@ -1,6 +1,6 @@
 const pluginName  = "Attachment Scanner";
 const pluginId    = "attachmentscanner@changlab.um.edu.mo";
-const version     = "0.2.0";
+const version     = "0.2.1";
 const mainJS      = "attachmentscanner.js";
 const mainFTL     = "attachmentscanner.ftl";
 const prefXHTML   = "preferences.xhtml";
@@ -146,11 +146,14 @@ var AttachmentScanner = {
             this.onPreferenceWindowOpen(doc);
     },
 
-    addMenuItem(window, menuID, itemId, l10nID, icon, options, command) {
+    async addMenuItem(window, menuID, itemId, l10nID, icon, options, command) {
         let doc = window.document;
         let menuitem = doc.createXULElement("menuitem");
         menuitem.id = itemId;
-        menuitem.setAttribute("data-l10n-id", l10nID);
+        // Zotero has a bug handling labels of menu items, popup menu mostly use 'en' and main menu randomly use 'en' or others
+        // menuitem.setAttribute("data-l10n-id", l10nID);
+        let s = await this.getString(l10nID);
+        menuitem.setAttribute("label", s);
         menuitem.addEventListener("command", command);
         if (icon) menuitem.style.listStyleImage = `url(${icon})`;
         if (options.hidden) menuitem.hidden = true;

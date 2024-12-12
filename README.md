@@ -14,13 +14,13 @@
 - Real-time monitoring: Adding or deleting attachments triggers automatic tag updates.
 
 ## Installation
-A. New Installation
+### New Installation
    1. Download the latest release.
    2. Open the Zotero plugins screen (Menu --> Tools --> Plugins).
    3. Click the gear icon (⚙) in the top-right corner and select “Install Plugin From File…”.
    4. Choose the downloaded .xpi file.
 
-B. Update
+### Update
    1. Open the Zotero plugins screen (Menu --> Tools --> Plugins).
    2. Click the gear icon (⚙) in the top-right corner and select “Check for updates”.
 

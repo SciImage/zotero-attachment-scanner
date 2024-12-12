@@ -6,6 +6,7 @@ const prefs_Nosource   = "tag_nosource";
 const prefs_Broken     = "tag_broken";
 const prefs_Duplicate  = "tag_duplicate";
 const prefs_Nonfile    = "tag_nonfile";
+const prefs_ScanNosource       = "scan_nosource";
 const prefs_ScanDuplicate      = "scan_duplicates";
 const prefs_ScanNonfile        = "scan_nonfiles";
 const prefs_RemovePubMedEntry  = "remove_pubmed_entry";
@@ -24,13 +25,14 @@ const emoTag_Broken    = "🚫 broken";
 const emoTag_Duplicate = "‼️ duplicate";
 const emoTag_Nonfile   = "❓ nonfile";
 
-useLog = false;
+useLog = true;
 
 // === Setting up
 
 AttachmentScanner.init = function({ id, version, rootURI }) {
     this.scanningState = 0;     // 0: no; 1: renaming tags; 2: scaning
 
+    this.scanNosource       = this.getPref(prefs_ScanNosource);
     this.scanDuplicate      = this.getPref(prefs_ScanDuplicate);
     this.scanNonfile        = this.getPref(prefs_ScanNonfile);
     this.removePubmedEntry  = this.getPref(prefs_RemovePubMedEntry);
@@ -94,6 +96,7 @@ AttachmentScanner.disablePreferenceItems = function(disabled) {
         doc.getElementById("attachmentscanner_checkbox2").disabled = disabled;
         doc.getElementById("attachmentscanner_checkbox3").disabled = disabled;
         doc.getElementById("attachmentscanner_checkbox4").disabled = disabled;
+        doc.getElementById("attachmentscanner_checkbox5").disabled = disabled;
 
         doc.getElementById(elmId_Nosource).disabled  = disabled;
         doc.getElementById(elmId_Broken).disabled    = disabled;
@@ -146,6 +149,7 @@ AttachmentScanner.getTagFromPreferenceWindow = function(elmID, prefID, defaulTag
 
 AttachmentScanner.preferencesChanged = function() {
     // Don't rely on items in preference windows, the user can use config editor to change the settings
+    this.scanNosource       = this.getPref(prefs_ScanNosource);
     this.scanDuplicate      = this.getPref(prefs_ScanDuplicate);
     this.scanNonfile        = this.getPref(prefs_ScanNonfile);
     this.removePubmedEntry  = this.getPref(prefs_RemovePubMedEntry);
@@ -159,31 +163,34 @@ AttachmentScanner.preferencesChanged = function() {
     if (this.scanningState != 0) return;
     if (this.tagNosource == _tagNosource   && this.tagBroken == _tagBroken &&
         this.tagDuplicate == _tagDuplicate && this.tagNonfile == _tagNonfile) return;
-    this.scanningState = 1;
     log("Renaming tags if");
+    this.scanningState = 1;
 
-    if (this.tagNosource  != _tagNosource) {
-        if (Zotero.Tags.getID(this.tagNosource))
-            Zotero.Tags.rename(Zotero.Libraries.userLibraryID, this.tagNosource, _tagNosource);
-        this.tagNosource = _tagNosource;
-    }
-    if (this.tagBroken  != _tagBroken) {
-        if (Zotero.Tags.getID(this.tagBroken))
-            Zotero.Tags.rename(Zotero.Libraries.userLibraryID, this.tagBroken, _tagBroken);
-        this.tagBroken = _tagBroken;
-    }
-    if (this.tagDuplicate  != _tagDuplicate) {
-        if (Zotero.Tags.getID(this.tagDuplicate))
-            Zotero.Tags.rename(Zotero.Libraries.userLibraryID, this.tagDuplicate, _tagDuplicate);
-        this.tagDuplicate = _tagDuplicate;
-    }
-    if (this.tagNonfile  != _tagNonfile) {
-        if (Zotero.Tags.getID(this.tagNonfile))
-            Zotero.Tags.rename(Zotero.Libraries.userLibraryID, this.tagNonfile, _tagNonfile);
-        this.tagNonfile = _tagNonfile;
+    try {
+        if (this.tagNosource  != _tagNosource) {
+            if (Zotero.Tags.getID(this.tagNosource))
+                Zotero.Tags.rename(Zotero.Libraries.userLibraryID, this.tagNosource, _tagNosource);
+            this.tagNosource = _tagNosource;
+        }
+        if (this.tagBroken  != _tagBroken) {
+            if (Zotero.Tags.getID(this.tagBroken))
+                Zotero.Tags.rename(Zotero.Libraries.userLibraryID, this.tagBroken, _tagBroken);
+            this.tagBroken = _tagBroken;
+        }
+        if (this.tagDuplicate  != _tagDuplicate) {
+            if (Zotero.Tags.getID(this.tagDuplicate))
+                Zotero.Tags.rename(Zotero.Libraries.userLibraryID, this.tagDuplicate, _tagDuplicate);
+            this.tagDuplicate = _tagDuplicate;
+        }
+        if (this.tagNonfile  != _tagNonfile) {
+            if (Zotero.Tags.getID(this.tagNonfile))
+                Zotero.Tags.rename(Zotero.Libraries.userLibraryID, this.tagNonfile, _tagNonfile);
+            this.tagNonfile = _tagNonfile;
+        }
+    } finally {
+        this.scanningState = 0;
     }
 
-    this.scanningState = 0;
     log("Tags renamed");
 };
 
@@ -243,13 +250,6 @@ AttachmentScanner.scanItems = async function(win, items) {
     // Check if renaming is needed, this happens if the preference window is not closed
     if (this.preferenceDocument) this.preferencesChanged();
 
-    // Disable/enable some functions
-    this.scanningState = 2;
-    this.disablePreferenceItems(true);
-    this.toggleMenuItems(win, true);
-    this.shouldCancelScan = false;
-    log("Start scan");
-
     progressTitle = await this.getString("attachmentscanner-scan-title");
     progressInfo  = await this.getString("attachmentscanner-scan-progreess");
     progressWait  = await this.getString("attachmentscanner-scan-renamewait");
@@ -261,67 +261,80 @@ AttachmentScanner.scanItems = async function(win, items) {
     this.progressWindow.progress = new this.progressWindow.ItemProgress("", "Scanning"); // note is a csskey that exist
     this.progressWindow.progress.setProgress(0.1);  // to avoid position moving
     this.progressWindow.show();
-    let index = 0;
-    let rate = Math.max(1, Math.round(items.length / 400));
 
-    // ******** HACK ********
-    // The implementation of the ProgressWindow has many issues, a few are listed here:
-    //   1: The icon parameters of both changeHeadline() and ItemProgress are cssIconKey, making it impossible to use
-    //      custom icons and sensitive to changes in Zotero's css definitions
-    //   2: The cssIconKeys used by changeHeadline() and ItemProgress are different!!!!
-    //   3: When the first parameter of changeHeadline() is empty, an ugly space is added.
-    //   4: ItemProgress shouldn't accept an icon, because the graph is used to shown the progress.
-    //      When the progress is abour 100, the progrssion disappear and become the icon. It is weired.
-    //   5: When the progress is [97.5, 100) the progrssion image is same as progress is 0.
-    // Here, I
-    //   1: Injected a style to make the icon show in the headline
-    //   2: Remove the empty node before the icon
-    //   3: Make the progress is between [0, 97.5)
-    let styleInjected = false;
-    let realRate = rate;        // to refresh more
-    rate = 1;
-    // ******** HACK ********
+    // Disable/enable some functions
+    log("Start scan");
+    this.scanningState = 2;
+    this.shouldCancelScan = false;
 
-    // Check each items
-    for (const aItem of items) {
-        if (this.shouldCancelScan) break;
-        // Update the progress window, less frequently
-        if (index % rate == 0) {
-            let s = progressInfo.replaceAll("${total}", items.length).replaceAll("${index}", index + 1);
-            // when the percentage is close to 100%,
-            this.progressWindow.progress.setProgress(Math.round(97.4 * index / items.length)); // not 100, just 97.4
-            this.progressWindow.progress.setText(s);
+    try {
+        this.disablePreferenceItems(true);
+        this.toggleMenuItems(win, true);
+        let index = 0;
+        let rate = Math.max(1, Math.round(items.length / 400));
 
-            // ******** HACK ********
-            if (!styleInjected && this.progressWindow.progress._image) {
-                const styleText = (Zotero.hiDPI) ? `.icon-attachmentScanner {background: url("${this.rootURI}skin/attachscan@2x.png") no-repeat content-box; background-size: 16px;}`
-                                                 : `.icon-attachmentScanner {background: url("${this.rootURI}skin/attachscan.png") no-repeat content-box;}`;
-                const doc = this.progressWindow.progress._image.ownerDocument;
-                const sheet = doc.styleSheets[0];
-                sheet.insertRule(styleText, sheet.cssRules.length);
-                const headLine = doc.getElementById("zotero-progress-text-headline");
-                if (headLine && headLine.children[0] && headLine.children[0].tagName == "label" &&
-                    headLine.children[0].innerHTML == "")
-                  headLine.children[0].hidden = true;
-                styleInjected = true;
-                rate = realRate;
-            } else if (rate < realRate) rate ++;
-            // ******** HACK ********
+        // ******** HACK ********
+        // The implementation of the ProgressWindow has many issues, a few are listed here:
+        //   1: The icon parameters of both changeHeadline() and ItemProgress are cssIconKey, making it impossible to use
+        //      custom icons and sensitive to changes in Zotero's css definitions
+        //   2: The cssIconKeys used by changeHeadline() and ItemProgress are different!!!!
+        //   3: When the first parameter of changeHeadline() is empty, an ugly space is added.
+        //   4: ItemProgress shouldn't accept an icon, because the graph is used to shown the progress.
+        //      When the progress is abour 100, the progrssion disappear and become the icon. It is weired.
+        //   5: When the progress is [97.5, 100) the progrssion image is same as progress is 0.
+        // Here, I
+        //   1: Injected a style to make the icon show in the headline
+        //   2: Remove the empty node before the icon
+        //   3: Make the progress is between [0, 97.5)
+        let styleInjected = false;
+        let realRate = rate;        // to refresh more
+        rate = 1;
+        // ******** HACK ********
+
+        // Check each items
+        for (const aItem of items) {
+            if (this.shouldCancelScan) break;
+
+            // Update the progress window, less frequently
+            if (index % rate == 0) {
+                let s = progressInfo.replaceAll("${total}", items.length).replaceAll("${index}", index + 1);
+                // when the percentage is close to 100%,
+                this.progressWindow.progress.setProgress(Math.round(97.4 * index / items.length)); // not 100, just 97.4
+                this.progressWindow.progress.setText(s);
+
+                // ******** HACK ********
+                if (!styleInjected && this.progressWindow.progress._image) {
+                    const styleText = (Zotero.hiDPI) ? `.icon-attachmentScanner {background: url("${this.rootURI}skin/attachscan@2x.png") no-repeat content-box; background-size: 16px;}`
+                                                     : `.icon-attachmentScanner {background: url("${this.rootURI}skin/attachscan.png") no-repeat content-box;}`;
+                    const doc = this.progressWindow.progress._image.ownerDocument;
+                    const sheet = doc.styleSheets[0];
+                    sheet.insertRule(styleText, sheet.cssRules.length);
+                    const headLine = doc.getElementById("zotero-progress-text-headline");
+                    if (headLine && headLine.children[0] && headLine.children[0].tagName == "label" &&
+                        headLine.children[0].innerHTML == "")
+                      headLine.children[0].hidden = true;
+                    styleInjected = true;
+                    rate = realRate;
+                } else if (rate < realRate) rate ++;
+                // ******** HACK ********
+            }
+            index++;
+
+            // Get item information
+            try {
+                const item = await Zotero.Items.getAsync(aItem.itemID);
+                await item.loadAllData();
+                if (await this.checkAttachements(item))
+                   await item.saveTx();
+            } finally {}
         }
-        index++;
-
-        // Get item information
-        const item = await Zotero.Items.getAsync(aItem.itemID);
-        await item.loadAllData();
-        if (await this.checkAttachements(item))
-           await item.saveTx();
+    } finally {
+        log("Clean up scan");
+        this.progressWindow.close();
+        this.scanningState = 0;
+        this.toggleMenuItems(win, false);
+        this.disablePreferenceItems(false);
     }
-
-    log("Clean up scan");
-    this.progressWindow.close();
-    this.scanningState = 0;
-    this.toggleMenuItems(win, false);
-    this.disablePreferenceItems(false);
 }
 
 // === Actual item checking
@@ -337,7 +350,14 @@ AttachmentScanner.checkAttachements = async function(item) {
         let attachment = await Zotero.Items.getAsync(attachmentID);
         if (attachment.isFileAttachment()) {
             hasFile = true;
-            if (!await attachment.getFilePathAsync()) hasBroken = true;
+
+            // On Linux, when the path (attachment.attachmentPath) is in DOS format, getFilePathAsync will fail
+            try {
+                if (!await attachment.getFilePathAsync()) hasBroken = true;
+            } catch (error) {
+                hasBroken = true;
+            }
+
             if (!hasDuplicates && this.scanDuplicate) {
                 if (attachTypes.includes(attachment.attachmentContentType))
                     hasDuplicates = true;
@@ -357,10 +377,12 @@ AttachmentScanner.checkAttachements = async function(item) {
         changed = true;
     }
 
-    if (hasFile && item.hasTag(this.tagNosource))   { changed = true; item.removeTag(this.tagNosource); }
-    if (!hasFile && !item.hasTag(this.tagNosource)) { changed = true; item.addTag(this.tagNosource); }
     if (!hasBroken && item.hasTag(this.tagBroken))  { changed = true; item.removeTag(this.tagBroken); }
     if (hasBroken && !item.hasTag(this.tagBroken))  { changed = true; item.addTag(this.tagBroken); }
+    if (this.scanNosource) {
+        if (hasFile && item.hasTag(this.tagNosource))   { changed = true; item.removeTag(this.tagNosource); }
+        if (!hasFile && !item.hasTag(this.tagNosource)) { changed = true; item.addTag(this.tagNosource); }
+    }
     if (this.scanDuplicate) {
         if (!hasDuplicates && item.hasTag(this.tagDuplicate)) { changed = true; item.removeTag(this.tagDuplicate); }
         if (hasDuplicates && !item.hasTag(this.tagDuplicate)) { changed = true; item.addTag(this.tagDuplicate); }
