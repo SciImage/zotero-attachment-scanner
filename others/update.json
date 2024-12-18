@@ -28,6 +28,7 @@
               "strict_min_version": "6.999"
             }
           }
+<<<<<<< HEAD
         },
         {
           "version": "0.3.0",
@@ -37,6 +38,8 @@
               "strict_min_version": "6.999"
             }
           }
+=======
+>>>>>>> 9fe22a6c8d701bee9a68a4389a655d075fb5bcb9
         }
       ]
     }
