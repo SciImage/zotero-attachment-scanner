@@ -1,6 +1,6 @@
 # Attachment Scanner Change log
 
-## 0.3.0, 2024-12-19
+## 0.3.0, 2024-12-18
 - Allow to ignore attachements with certain filenames when checking for duplicates
 - Introduce an option to delete attachments linking to the same file
 - Change the default setting of “Real-time monitoring” to off
