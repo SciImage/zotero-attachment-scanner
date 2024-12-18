@@ -1,21 +1,28 @@
 attachmentscanner-prefs-title = 附件管理
 
-attachmentscanner-start-scan =
-    .label = 掃描所有附件
+attachmentscanner-start-scan = 掃描所有附件
 
-attachmentscanner-start-scan-selected =
-    .label = 掃描已選項目的附件
+attachmentscanner-start-scan-selected = 掃描已選項目的附件
 
-attachmentscanner-cancel-scan =
-    .label = 取消附件掃描
+attachmentscanner-cancel-scan = 取消附件掃描
+
+attachmentscanner-remove-same-link = 刪除指向同一文檔的附件
 
 attachmentscanner-section-options = 選項
+
+attachmentscanner-scan-nosource =
+    .label = 為沒有文檔類附件的項目加上標籤
 
 attachmentscanner-scan-duplicates =
     .label = 檢查項目是否含有多個同類附件
 
+attachmentscanner-ignore-file-masks = 忽略文檔名含有這些字符串的附件
+
+attachmentscanner-masks-hint =
+    .placeholder = 可用多個RegEx: abc; [Dd]ef; /si/i
+
 attachmentscanner-scan-nonfiles =
-    .label = 检查条目是否含有非文件类附件
+    .label = 檢查項目是否含有非文檔類附件
 
 attachmentscanner-remove-pubmed-entry =
     .label = 刪除所有 "PubMed entry" 附件
@@ -46,3 +53,7 @@ attachmentscanner-scan-title = 掃描附件
 attachmentscanner-scan-progreess = 正掃描${total}個項目中的第${index}個……
 
 attachmentscanner-scan-renamewait = 正在更新標籤，完成後將開始掃描附件
+
+attachmentscanner-error-auto-delete = 結束檢查！因為已經安裝ZotMoov，且它的 "Automatically Delete External Linked Files in the ZotMoov Directory" 功能已打開。
+
+attachmentscanner-warning-auto-delete = 如已安裝類似ZotMoov的可能自動刪除文檔的插件，這一操作可能導至附性文檔被刪，請確認是否繼續？

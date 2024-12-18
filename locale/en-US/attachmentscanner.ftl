@@ -1,18 +1,25 @@
 attachmentscanner-prefs-title = Attachments
 
-attachmentscanner-start-scan =
-    .label = Scan All Attachments
+attachmentscanner-start-scan = Scan All Attachments
 
-attachmentscanner-start-scan-selected =
-    .label = Scan Attachments of Selected Items
+attachmentscanner-start-scan-selected = Scan Attachments of Selected Items
 
-attachmentscanner-cancel-scan =
-    .label = Cancel Attachment Scanning
+attachmentscanner-cancel-scan = Cancel Attachment Scanning
+
+attachmentscanner-remove-same-link = Delete attachements linked to the same file
 
 attachmentscanner-section-options = Options
 
+attachmentscanner-scan-nosource =
+    .label = Tag items without file attachment
+
 attachmentscanner-scan-duplicates =
     .label = Scan items for duplicate same-type attachments
+
+attachmentscanner-ignore-file-masks = Ignore files whose names contain
+
+attachmentscanner-masks-hint =
+    .placeholder = Allows multiple Regex: abc; [Dd]ef; /si/i
 
 attachmentscanner-scan-nonfiles =
     .label = Scan items for non-file attachments
@@ -46,3 +53,7 @@ attachmentscanner-scan-title = Scanning attachements
 attachmentscanner-scan-progreess = Scanning ${index} of ${total} items...
 
 attachmentscanner-scan-renamewait = Updating the changed tags, scan will start once finishes
+
+attachmentscanner-error-auto-delete = Stop!!! ZotMoov is installed and its "Automatically Delete External Linked Files in the ZotMoov Directory" is on.
+
+attachmentscanner-warning-auto-delete = This may lead to file loss if ZotMoov-like plugins are installed and their auto file delete function is on. Do you want to continue?
