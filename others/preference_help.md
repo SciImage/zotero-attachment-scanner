@@ -23,7 +23,7 @@ When enabled, the plugin tags items with non-file attachments with the “Non-fi
 When enabled, the plugin removes all non-file attachments whose names are “PubMed entry”. These attachments are added by Zotero to items from PubMed and some journals.
 
 ### Monitor attachments and update tags
-When enabled, the plugin will perform all checking operations whenever an item or attachment is added or deleted from the library.
+When enabled, the plugin will perform all selected checking operations whenever an item or attachment is added or deleted from the library.
 
 
 Tags for items with unusual attachments
