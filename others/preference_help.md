@@ -11,7 +11,7 @@ When enabled, the plugin tags items with the “No attachment” tag if they lac
 When enabled, the plugin tags items with the “Duplicate attachments” tag if they have two or more attachments of the same content type. The content type, similar to a [MIME type](https://en.wikipedia.org/wiki/Media_type), is mainly determined by the file’s extension. For instance, items with two PDF attachments are considered duplicates, whereas an item with a PDF and a .xlsx attachment is not.
 
 #### Ignore files whose names contain
-Attachments with file names matching these masks will be ignored during duplicate checking. Separate multiple masks with a semicolon (;).". Internally, these masks are trimed and converted to RegEx. Examples,
+Attachments with file names matching these masks will be ignored during duplicate checking. Separate multiple masks with a semicolon (`;``). Internally, these masks are trimed and converted to RegEx. Examples,
 - `abc; [dD]ef `: matches names with either “abc”, “def” or "Def", case-sensitive.
 - `abc/i; def `: matches names with either “abc” (case-insensitive) or “def” (case-sensitive).
 - `/ abc; def `: matches names with either “ abc” or “def”, case-sensitive.
