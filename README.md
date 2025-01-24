@@ -19,7 +19,7 @@ Plugin Functions and Features
 Installation
 -----
 ### New Installation
-   1. Download the latest release.
+   1. Download the .xpi file from [the latest release](https://github.com/SciImage/zotero-attachment-scanner/releases/latest) (Firefox users: Right click and save the file).
    2. Open the Zotero plugins screen (Menu --> Tools --> Plugins).
    3. Click the gear icon (⚙) in the top-right corner and select “Install Plugin From File…”.
    4. Choose the downloaded .xpi file.
