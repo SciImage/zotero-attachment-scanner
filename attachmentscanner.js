@@ -253,7 +253,7 @@ AttachmentScanner.onItemChange = {
                     item = await Zotero.Items.getAsync(item.parentID);
                     await item.loadAllData();
                 }
-                if (await Zotero.AttachmentScanner.checkAttachements(item))
+                if (item.isFileAttachment() && await Zotero.AttachmentScanner.checkAttachements(item))
                     await item.saveTx();
             }
         }

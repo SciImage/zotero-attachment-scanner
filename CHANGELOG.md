@@ -1,11 +1,14 @@
 # Attachment Scanner Change log
 
+## 0.3.1, 2025-04-12
+- Bug fix: When Change Monitor is on, the "No source" tag is added to modifided notes.
+
 ## 0.3.0, 2024-12-18
 - Allow to ignore attachments with certain filenames when checking for duplicates
 - Introduce an option to delete attachments linking to the same file
-- Change the default setting of “Real-time monitoring” to off
+- Change the default setting of Real-time monitoring to off
 - Add a help link to the settings screen
-- Bug fix: Setting of “Real-time monitoring” is not effective before restarting Zotero
+- Bug fix: Setting of Real-time monitoring is not effective before restarting Zotero
 
 ## 0.2.1, 2024-12-12
 - Introduce an option to disable tagging items with no attachments
