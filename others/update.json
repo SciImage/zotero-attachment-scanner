@@ -46,6 +46,15 @@
               "strict_min_version": "6.999"
             }
           }
+        },
+        {
+          "version": "0.3.2",
+          "update_link": "https://github.com/SciImage/zotero-attachment-scanner/releases/download/v0.3.2/attachmentscanner-0.3.2.xpi",
+          "applications": {
+            "zotero": {
+              "strict_min_version": "6.999"
+            }
+          }
         }
       ]
     }

@@ -1,6 +1,6 @@
 const pluginName  = "Attachment Scanner";
 const pluginId    = "attachmentscanner@changlab.um.edu.mo";
-const version     = "0.3.1";
+const version     = "0.3.2";
 const mainJS      = "attachmentscanner.js";
 const mainFTL     = "attachmentscanner.ftl";
 const prefXHTML   = "preferences.xhtml";

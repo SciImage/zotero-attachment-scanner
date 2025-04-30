@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Attachment Scanner",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "description": "Plugin for scanning items with no, broken, and duplicate attachments",
     "author": "Wakam Chang",
     "homepage_url": "https://github.com/SciImage/zotero-attachment-scanner",

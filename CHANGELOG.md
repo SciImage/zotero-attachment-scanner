@@ -1,5 +1,8 @@
 # Attachment Scanner Change log
 
+## 0.3.2, 2025-04-30
+- Bug fix: Restore the function of Change Monitor.
+
 ## 0.3.1, 2025-04-12
 - Bug fix: When Change Monitor is on, the "No source" tag is added to modifided notes.
 
