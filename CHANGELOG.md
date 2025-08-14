@@ -1,5 +1,14 @@
 # Attachment Scanner Change log
 
+## 0.4.0, 2025-08-14
+- Add an option to remove Snapshots
+- Add an option to remove missing attachments (Use with caution)
+- Add a column to show numbers of attachements
+- Add a column to show total sizes of attachements
+- Add a menu item to scan and report orphan files in the Attachment Base Directory.
+- Make significant changes to the bootloader
+- Bug fix: Reenabling the plugin is not possible after it has been disabled.
+
 ## 0.3.2, 2025-04-30
 - Bug fix: Restore the function of Change Monitor.
 

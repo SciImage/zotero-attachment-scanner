@@ -1,60 +1,78 @@
 <linkset>
-    <html:link rel="localization" href="attachmentscanner.ftl"/>
+  <html:link rel="localization" href="attachmentscanner.ftl"/>
 </linkset>
 
 <vbox onload="Zotero.AttachmentScanner.initPreference(document);">
-    <groupbox>
-        <vbox>
-            <label><html:h2 label="" data-l10n-id="attachmentscanner-section-options"/></label>
-            <separator class="thin"/>
+  <groupbox>
+    <vbox>
+      <label><html:h2 label="" data-l10n-id="attachmentscanner-section-scanning"/></label>
+      <checkbox native="true" id="attachmentscanner_checkbox1" preference="extensions.attachmentscanner.scan_nosource" data-l10n-id="attachmentscanner-scan-nosource" />
+      <checkbox native="true" id="attachmentscanner_checkbox2" preference="extensions.attachmentscanner.scan_nonfiles" data-l10n-id="attachmentscanner-scan-nonfiles" />
+      <checkbox native="true" id="attachmentscanner_checkbox3" preference="extensions.attachmentscanner.scan_duplicates" data-l10n-id="attachmentscanner-scan-duplicates" onclick="Zotero.AttachmentScanner.duplicateSettingChanged();"/>
+      <hbox align="center" style="margin-left: 28px;">
+        <label for="attachmentscanner_file_masks" data-l10n-id="attachmentscanner-ignore-file-masks"/>
+        <html:input type="text" id="attachmentscanner_file_masks" data-l10n-id="attachmentscanner-masks-hint" preference="extensions.attachmentscanner.ignored_file_masks" style="flex: 1;"/>
+        <label is="zotero-text-link" id="attachmentscanner_help1" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#scan-items-for-duplicate-same-type-attachments" style="maring-right: 8px; margin-left: 2px; text-decoration: none;">?</label>
+      </hbox>
+      <checkbox native="true" id="attachmentscanner_checkbox4" preference="extensions.attachmentscanner.remove_pubmed_entry" data-l10n-id="attachmentscanner-remove-pubmed-entry" />
+      <checkbox native="true" id="attachmentscanner_checkbox5" preference="extensions.attachmentscanner.remove_snapshot" data-l10n-id="attachmentscanner-remove-snapshot" />
+      <hbox align="center">
+        <checkbox native="true" id="attachmentscanner_checkbox6" preference="extensions.attachmentscanner.remove_broken" data-l10n-id="attachmentscanner-remove-broken" />
+        <label is="zotero-text-link" id="attachmentscanner_help1" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#remove-missing-attachments" style="maring-right: 8px; margin-left: 2px; text-decoration: none;">?</label>
+      </hbox>
+    </vbox>
+  </groupbox>
 
-            <checkbox native="true" id="attachmentscanner_checkbox1" preference="extensions.attachmentscanner.scan_nosource" data-l10n-id="attachmentscanner-scan-nosource" />
-            <checkbox native="true" id="attachmentscanner_checkbox2" preference="extensions.attachmentscanner.scan_duplicates" data-l10n-id="attachmentscanner-scan-duplicates" onclick="Zotero.AttachmentScanner.duplicateSettingChanged();"/>
-            <hbox align="center" style="margin-left: 30px;">
-                <label for="attachmentscanner_file_masks" data-l10n-id="attachmentscanner-ignore-file-masks"/>
-                <html:input type="text" data-l10n-id="attachmentscanner-masks-hint" id="attachmentscanner_file_masks" preference="extensions.attachmentscanner.ignored_file_masks" style="flex: 1;"/>
-            </hbox>
-            <checkbox native="true" id="attachmentscanner_checkbox3" preference="extensions.attachmentscanner.scan_nonfiles" data-l10n-id="attachmentscanner-scan-nonfiles" />
-            <checkbox native="true" id="attachmentscanner_checkbox4" preference="extensions.attachmentscanner.remove_pubmed_entry" data-l10n-id="attachmentscanner-remove-pubmed-entry" />
-            <checkbox native="true" id="attachmentscanner_checkbox5" preference="extensions.attachmentscanner.monitor_attachments" data-l10n-id="attachmentscanner-monitor-change" />
-        </vbox>
-    </groupbox>
+  <groupbox>
+    <vbox>
+      <label><html:h2 label="" data-l10n-id="attachmentscanner-section-more"/></label>
+      <checkbox native="true" id="attachmentscanner_checkbox7" preference="extensions.attachmentscanner.monitor_attachments" data-l10n-id="attachmentscanner-monitor-change" />
+      <checkbox native="true" id="attachmentscanner_checkbox8" preference="extensions.attachmentscanner.monospace_font" data-l10n-id="attachmentscanner-monospace-font" />
+        <radiogroup orient="horizontal" id="attachmentscanner_junk_file" preference="extensions.attachmentscanner.junk_orphan_files">
+          <radio id="attachmentscanner_ignore_junk" data-l10n-id="attachmentscanner-orphan-ignore" value="0"/>
+          <radio id="attachmentscanner_report_junk" data-l10n-id="attachmentscanner-orphan-report" value="1"/>
+          <radio id="attachmentscanner_delete_junk" data-l10n-id="attachmentscanner-orphan-delete" value="2"/>
+          <label data-l10n-id="attachmentscanner-orphan-files" style="flex: 1; margin-left: 10px"/>
+        </radiogroup>
+    </vbox>
+  </groupbox>
 
-    <groupbox>
-        <vbox>
-            <label><html:h2 label="" data-l10n-id="attachmentscanner-section-tags"/></label>
-            <description data-l10n-id="attachmentscanner-section-tags-desc"/>
-            <separator class="thin"/>
+  <groupbox>
+    <vbox>
+      <label><html:h2 label="" data-l10n-id="attachmentscanner-section-tags"/></label>
+      <description data-l10n-id="attachmentscanner-section-tags-desc"/>
+      <separator class="thin"/>
 
-            <hbox>
-                <div style="text-align: right; width: 180px; margin: 6px;"><label data-l10n-id="attachmentscanner-tag-nosource" style="width: 180px;" /></div>
-                <html:input id="attachmentscanner_nosource" preference="extensions.attachmentscanner.tag_nosource" type="text" style="flex: 1; margin-right: 32px" />
-            </hbox>
-            <hbox>
-                <div style="text-align: right; width: 180px; margin: 6px;"><label data-l10n-id="attachmentscanner-tag-broken" style="width: 180px;" /></div>
-                <html:input id="attachmentscanner_broken" preference="extensions.attachmentscanner.tag_broken" type="text"  style="flex: 1; margin-right: 32px" />
-            </hbox>
-            <hbox>
-                <div style="text-align: right; width: 180px; margin: 6px;"><label data-l10n-id="attachmentscanner-tag-duplicate" style="width: 180px;" /></div>
-                <html:input id="attachmentscanner_duplicate" preference="extensions.attachmentscanner.tag_duplicate" type="text" style="flex: 1; margin-right: 32px" />
-            </hbox>
-            <hbox>
-                <div style="text-align: right; width: 180px; margin: 6px;"><label data-l10n-id="attachmentscanner-tag-nonfile" style="width: 180px;" /></div>
-                <html:input id="attachmentscanner_nonfile" preference="extensions.attachmentscanner.tag_nonfile" type="text" style="flex: 1; margin-right: 32px" />
-            </hbox>
+      <hbox>
+        <div style="text-align: right; width: 180px; margin: 6px;"><label data-l10n-id="attachmentscanner-tag-nosource" style="width: 180px;" /></div>
+        <html:input id="attachmentscanner_nosource" preference="extensions.attachmentscanner.tag_nosource" type="text" style="flex: 1; margin-right: 32px" />
+      </hbox>
+      <hbox>
+        <div style="text-align: right; width: 180px; margin: 6px;"><label data-l10n-id="attachmentscanner-tag-broken" style="width: 180px;" /></div>
+        <html:input id="attachmentscanner_broken" preference="extensions.attachmentscanner.tag_broken" type="text"  style="flex: 1; margin-right: 32px" />
+      </hbox>
+      <hbox>
+        <div style="text-align: right; width: 180px; margin: 6px;"><label data-l10n-id="attachmentscanner-tag-nonfile" style="width: 180px;" /></div>
+        <html:input id="attachmentscanner_nonfile" preference="extensions.attachmentscanner.tag_nonfile" type="text" style="flex: 1; margin-right: 32px" />
+      </hbox>
+      <hbox>
+        <div style="text-align: right; width: 180px; margin: 6px;"><label data-l10n-id="attachmentscanner-tag-duplicate" style="width: 180px;" /></div>
+        <html:input id="attachmentscanner_duplicate" preference="extensions.attachmentscanner.tag_duplicate" type="text" style="flex: 1; margin-right: 32px" />
+      </hbox>
 
-            <separator class="thin"/>
-            <hbox align="center" pack="end">
-                <button id="attachmentscanner_tags1" data-l10n-id="attachmentscanner-use-zss-tags" style="margin-right: 6px; padding: 2px 5px;"
-                    oncommand="Zotero.AttachmentScanner.useZssTags(document);"
-                />
-                <button id="attachmentscanner_tags2" data-l10n-id="attachmentscanner-use-simple-tags" style="margin-right: 6px; padding: 2px 5px;"
-                    oncommand="Zotero.AttachmentScanner.useSimpleTags(document);"
-                />
-                <button id="attachmentscanner_tags3" data-l10n-id="attachmentscanner-use-emoji-tags" style="padding: 2px 5px;"
-                    oncommand="Zotero.AttachmentScanner.useEmojiTags(document);"
-                />
-            </hbox>
-        </vbox>
-    </groupbox>
+      <separator class="thin"/>
+      <hbox align="center" pack="end">
+        <button id="attachmentscanner_tags1" data-l10n-id="attachmentscanner-use-zss-tags" style="margin-right: 6px; padding: 2px 5px;"
+          oncommand="Zotero.AttachmentScanner.useZssTags(document);"
+        />
+        <button id="attachmentscanner_tags2" data-l10n-id="attachmentscanner-use-simple-tags" style="margin-right: 6px; padding: 2px 5px;"
+          oncommand="Zotero.AttachmentScanner.useSimpleTags(document);"
+        />
+        <button id="attachmentscanner_tags3" data-l10n-id="attachmentscanner-use-emoji-tags" style="padding: 2px 5px;"
+          oncommand="Zotero.AttachmentScanner.useEmojiTags(document);"
+        />
+      </hbox>
+    </vbox>
+  </groupbox>
+  <separator class="thin"/>
 </vbox>

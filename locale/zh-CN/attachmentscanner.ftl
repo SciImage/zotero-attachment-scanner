@@ -1,59 +1,72 @@
-attachmentscanner-prefs-title = é™„ä»¶ç®¡ç†
+## Menu items
+attachmentscanner-start-scan = É¨ÃèËùÓĞ¸½¼ş
+attachmentscanner-start-scan-selected = É¨ÃèÒÑÑ¡ÌõÄ¿µÄ¸½¼ş
+attachmentscanner-cancel-scan = È¡Ïû¸½¼şÉ¨Ãè
+attachmentscanner-scan-orphans = É¨Ãè¸½¼ş¸ùÄ¿Â¼ÖĞµÄ¶àÓàÎÄ¼ş
+attachmentscanner-remove-same-link = ÒÆ³ıÖ¸ÏòÍ¬Ò»ÎÄ¼şµÄ¸½¼ş
+attachmentscanner-attachment-number = ¸½¼şÊıÄ¿
+attachmentscanner-attachment-size = ¸½¼ş´óĞ¡£¨¼«Âı£©
 
-attachmentscanner-start-scan = æ‰«ææ‰€æœ‰é™„ä»¶
+## Message
+attachmentscanner-scan-title = É¨Ãè¸½¼ş
+attachmentscanner-scan-progreess = ÕıÉ¨Ãè {$total} ¸öÌõÄ¿ÖĞµÄµÚ {$index} ¸ö¡­¡­
+attachmentscanner-error-auto-delete = ½áÊø¼ì²é£¡ÒòÎªÒÑ¾­°²×°ZotMoov£¬ÇÒËüµÄ "Automatically Delete External Linked Files in the ZotMoov Directory" ¹¦ÄÜÒÑ´ò¿ª¡£
+attachmentscanner-warning-auto-delete = ÈçÒÑ°²×°ÀàËÆZotMoovµÄ¿ÉÄÜ×Ô¶¯ÒÆ³ıÎÄ¼şµÄ²å¼ş£¬ÕâÒ»²Ù×÷¿ÉÄÜµ¼ÖÁ¸½ĞÔÎÄ¼ş±»É¾£¬ÇëÈ·ÈÏÊÇ·ñ¼ÌĞø£¿
 
-attachmentscanner-start-scan-selected = æ‰«æå·²é€‰æ¡ç›®çš„é™„ä»¶
+attachmentscanner-orphan-1 = 1 ¸ö¶àÓàÎÄ¼ş
+attachmentscanner-orphan-n = {$orphan} ¸ö¶àÓàÎÄ¼ş
+attachmentscanner-junk-1 = 1 ¸öÎŞÓÃÏµÍ³ÎÄ¼ş
+attachmentscanner-junk-n = {$junk} ¸öÎŞÓÃÏµÍ³ÎÄ¼ş
+attachmentscanner-empty-dir-1 = 1 ¸ö²»º¬¸½¼şÄ¿Â¼
+attachmentscanner-empty-dir-n = {$empty-dir} ¸ö²»º¬¸½¼şÄ¿Â¼
+attachmentscanner-separator = {"£¬"}
+attachmentscanner-last-separator = {"ºÍ "}
+attachmentscanner-no-orphan = ¸½¼ş¸ùÄ¿Â¼ÖĞÃ»ÓĞ¶àÓàÎÄ¼ş£¡
+attachmentscanner-orphan-found-1 = ÔÚ¸½¼ş¸ùÄ¿Â¼ÖĞÕÒµ½{$found}¡£
+attachmentscanner-orphan-found-n = ÔÚ¸½¼ş¸ùÄ¿Â¼ÖĞÕÒµ½{$found}¡£
+attachmentscanner-prmopt-copy-close = ¸´ÖÆ²¢¹Ø±Õ
 
-attachmentscanner-cancel-scan = å–æ¶ˆé™„ä»¶æ‰«æ
+## Settings
+attachmentscanner-prefs-title = ¸½¼ş¹ÜÀí
 
-attachmentscanner-remove-same-link = ç§»é™¤æŒ‡å‘åŒä¸€æ–‡ä»¶çš„é™„ä»¶
-
-attachmentscanner-section-options = é€‰é¡¹
-
+## Settings - Options
+attachmentscanner-section-scanning = É¨ÃèÑ¡Ïî
 attachmentscanner-scan-nosource =
-    .label = ä¸ºæ²¡æœ‰æ–‡ä»¶ç±»é™„ä»¶çš„æ¡ç›®åŠ ä¸Šæ ‡ç­¾
-
-attachmentscanner-scan-duplicates =
-    .label = æ£€æŸ¥æ¡ç›®æ˜¯å¦å«æœ‰å¤šä¸ªåŒç±»é™„ä»¶
-
-attachmentscanner-ignore-file-masks = å¿½ç•¥æ–‡ä»¶åå«æœ‰è¿™äº›å­—ä¸²çš„é™„ä»¶
-
-attachmentscanner-masks-hint =
-    .placeholder = å¯ç”¨å¤šä¸ªRegEx: abc; [Dd]ef; /si/i
-
+    .label = ÎªÃ»ÓĞÎÄ¼şÀà¸½¼şµÄÌõÄ¿¼ÓÉÏ±êÇ©
 attachmentscanner-scan-nonfiles =
-    .label = æ£€æŸ¥æ¡ç›®æ˜¯å¦å«æœ‰éæ–‡ä»¶ç±»é™„ä»¶
-
+    .label = ¼ì²éÌõÄ¿ÊÇ·ñº¬ÓĞ·ÇÎÄ¼şÀà¸½¼ş
+attachmentscanner-scan-duplicates =
+    .label = ¼ì²éÌõÄ¿ÊÇ·ñº¬ÓĞ¶à¸öÍ¬Àà¸½¼ş
+attachmentscanner-ignore-file-masks = ºöÂÔÎÄ¼şÃûº¬ÓĞÕâĞ©×Ö´®µÄ¸½¼ş
+attachmentscanner-masks-hint =
+    .placeholder = ¿ÉÓÃ¶à¸öRegEx: abc; [Dd]ef; /si/i
 attachmentscanner-remove-pubmed-entry =
-    .label = ç§»é™¤æ‰€æœ‰ "PubMed entry" é™„ä»¶
+    .label = ÒÆ³ıËùÓĞ "PubMed entry" ¸½¼ş
+attachmentscanner-remove-snapshot =
+    .label = ÏîÄ¿º¬ÓĞPDF/EPUB¸½¼ÓµµÊ±£¬É¾³ıÍøÒ³¿ìÕÕ
+attachmentscanner-remove-broken =
+    .label = É¾³ıÈ±Ê§µÄ¸½¼Óµµ (Îñ±ØĞ¡ĞÄÊ¹ÓÃ; ¸½¼ş±ä»¯Òı·¢µÄ¸üĞÂ²»»áÉ¾³ı¸½¼Óµµ)
 
+attachmentscanner-section-more = ÆäËüÑ¡Ïî
 attachmentscanner-monitor-change =
-    .label = é™„ä»¶è®ŠåŒ–æ™‚ï¼Œè‡ªå‹•æ›´æ–°æ¡ç›®çš„æ ‡ç­¾
+    .label = ¸½¼ş±ä»¯Ê±£¬×Ô¶¯¸üĞÂÌõÄ¿µÄ±êÇ©
+attachmentscanner-monospace-font =
+    .label = ÔÚ ¡°¸½¼ş´óĞ¡¡± Ò»À¸ÖĞÊ¹ÓÃ¶¨¿í×ÖÌå
+attachmentscanner-orphan-ignore =
+    .label = ºöÂÔ
+attachmentscanner-orphan-report =
+    .label = ±¨¸æ
+attachmentscanner-orphan-delete =
+    .label = É¾³ı
+attachmentscanner-orphan-files = É¨Ãè¶àÓàÎÄ¼şÊ±ÕÒµ½µÄÎŞÓÃÎÄ¼ş (<code>desktop.ini</code>¡¢<code>thumbs.db</code>ºÍ<code>.ds_store</code>)
 
-attachmentscanner-section-tags = å«éå¸¸è§„é™„ä»¶çš„æ¡ç›®æ ‡ç­¾
-
-attachmentscanner-section-tags-desc = ä»¥ä¸‹æ ‡ç­¾å¦‚è¢«ä¿®æ”¹ï¼Œåœ¨ç„¦ç‚¹ç¦»å¼€æœ¬è§†çª—åæˆ–å¼€å§‹æ‰«æå‰ï¼Œæ‰€æœ‰å«è¯¥æ ‡ç­¾çš„æ¡ç›®å°†è¢«æ›´æ–°ã€‚
-
-attachmentscanner-tag-nosource = æ¡ç›®æ²¡æœ‰é™„ä»¶:
-
-attachmentscanner-tag-broken = æ¡ç›®é™„ä»¶ä¸å­˜åœ¨:
-
-attachmentscanner-tag-duplicate = æ¡ç›®æœ‰å¤šä¸ªåŒç±»é™„ä»¶:
-
-attachmentscanner-tag-nonfile = æ¡ç›®æœ‰éæ–‡ä»¶ç±»é™„ä»¶:
-
-attachmentscanner-use-zss-tags = ä½¿ç”¨ "Zotero Storage Scanner" çš„æ ‡ç­¾
-
-attachmentscanner-use-simple-tags = ä½¿ç”¨ç®€å•æ ‡ç­¾
-
-attachmentscanner-use-emoji-tags = ä½¿ç”¨ Emoji æ ‡ç­¾
-
-attachmentscanner-scan-title = æ‰«æé™„ä»¶
-
-attachmentscanner-scan-progreess = æ­£æ‰«æ${total}ä¸ªæ¡ç›®ä¸­çš„ç¬¬${index}ä¸ªâ€¦â€¦
-
-attachmentscanner-scan-renamewait = æ­£åœ¨æ›´æ–°æ ‡ç­¾ï¼Œå®Œæˆåå°†å¼€å§‹æ‰«æé™„ä»¶
-
-attachmentscanner-error-auto-delete = ç»“æŸæ£€æŸ¥ï¼å› ä¸ºå·²ç»å®‰è£…ZotMoovï¼Œä¸”å®ƒçš„ "Automatically Delete External Linked Files in the ZotMoov Directory" åŠŸèƒ½å·²æ‰“å¼€ã€‚
-
-attachmentscanner-warning-auto-delete = å¦‚å·²å®‰è£…ç±»ä¼¼ZotMoovçš„å¯èƒ½è‡ªåŠ¨ç§»é™¤æ–‡ä»¶çš„æ’ä»¶ï¼Œè¿™ä¸€æ“ä½œå¯èƒ½å¯¼è‡³é™„æ€§æ–‡ä»¶è¢«åˆ ï¼Œè¯·ç¡®è®¤æ˜¯å¦ç»§ç»­ï¼Ÿ
+## Settings - Tags
+attachmentscanner-section-tags = º¬·Ç³£¹æ¸½¼şµÄÌõÄ¿±êÇ©
+attachmentscanner-section-tags-desc = ÒÔÏÂ±êÇ©Èç±»ĞŞ¸Ä£¬ÔÚ½¹µãÀë¿ª±¾ÊÓ´°ºó»ò¿ªÊ¼É¨ÃèÇ°£¬ËùÓĞº¬¸Ã±êÇ©µÄÌõÄ¿½«±»¸üĞÂ¡£
+attachmentscanner-tag-nosource = ÌõÄ¿Ã»ÓĞ¸½¼ş:
+attachmentscanner-tag-broken = ÌõÄ¿¸½¼ş²»´æÔÚ:
+attachmentscanner-tag-duplicate = ÌõÄ¿ÓĞ¶à¸öÍ¬Àà¸½¼ş:
+attachmentscanner-tag-nonfile = ÌõÄ¿ÓĞ·ÇÎÄ¼şÀà¸½¼ş:
+attachmentscanner-use-zss-tags = Ê¹ÓÃ "Zotero Storage Scanner" µÄ±êÇ©
+attachmentscanner-use-simple-tags = Ê¹ÓÃ¼òµ¥±êÇ©
+attachmentscanner-use-emoji-tags = Ê¹ÓÃ Emoji ±êÇ©

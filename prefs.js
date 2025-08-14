@@ -1,11 +1,15 @@
  pref("extensions.attachmentscanner.scan_nosource", true);
- pref("extensions.attachmentscanner.scan_duplicates", true);
  pref("extensions.attachmentscanner.scan_nonfiles", false);
+ pref("extensions.attachmentscanner.scan_duplicates", true);
  pref("extensions.attachmentscanner.remove_pubmed_entry", false);
- pref("extensions.attachmentscanner.show_remove_same_file", false);
+ pref("extensions.attachmentscanner.remove_snapshot", false);
+ pref("extensions.attachmentscanner.remove_broken", false);
  pref("extensions.attachmentscanner.monitor_attachments", false);
+ pref("extensions.attachmentscanner.show_remove_same_file", false);
+ pref("extensions.attachmentscanner.monospace_font", true);
+ pref("extensions.attachmentscanner.junk_orphan_files", 0);
+ pref("extensions.attachmentscanner.ignored_file_masks", "");
  pref("extensions.attachmentscanner.tag_nosource", "#nosource");
  pref("extensions.attachmentscanner.tag_broken", "#broken");
  pref("extensions.attachmentscanner.tag_duplicate", "#duplicate");
  pref("extensions.attachmentscanner.tag_nonfile", "#nonfile");
- pref("extensions.attachmentscanner.ignored_file_masks", "");
