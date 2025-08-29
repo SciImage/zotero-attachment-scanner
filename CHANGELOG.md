@@ -2,7 +2,7 @@
 
 ## 0.4.1, 2025-08-29
 - Check relative paths when scanning the Attachment Base Directory
-- Bug fix: Prevent 'Attchement not loaded for ..." error messages in the logs
+- Bug fix: Prevent "Attchement not loaded for ..." error messages in the logs
 - Bug fix: Fix Simplified Chinese translation
 
 ## 0.4.0, 2025-08-14
@@ -44,7 +44,7 @@
   - Add tags to items with any missing attachments
   - Optionally, add tags to items with duplicate attachments of the same type
   - Optionally, add tags to items with non-file attachments
-  - Optionally, remove all ¡°PubMed entry¡± attachments
+  - Optionally, remove all Â¡Â°PubMed entryÂ¡Â± attachments
 - Customizable tags: You can use any tags; three predefined sets of tags are available with a click.
 - Tag updating: Customization applies to all existing tags without rescanning.
 - Progress tracking: The scanning progress is displayed in a window.
