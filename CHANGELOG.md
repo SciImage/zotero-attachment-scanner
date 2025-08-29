@@ -1,5 +1,10 @@
 # Attachment Scanner Change log
 
+## 0.4.1, 2025-08-29
+- Check relative paths when scanning the Attachment Base Directory
+- Bug fix: Prevent 'Attchement not loaded for ..." error messages in the logs
+- Bug fix: Fix Simplified Chinese translation
+
 ## 0.4.0, 2025-08-14
 - Add an option to remove Snapshots
 - Add an option to remove missing attachments (Use with caution)

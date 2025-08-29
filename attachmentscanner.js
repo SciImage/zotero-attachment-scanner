@@ -216,7 +216,7 @@ AttachmentScanner.init = function({ id, version, rootURI }) {
         pluginID: pluginId,
         sortReverse: true,
         dataProvider: (item, dataKey) => {
-            return item.numAttachments(false);
+            return (item.isRegularItem()) ? item.numAttachments(false) : 0;
         },
         zoteroPersist: ['width', 'hidden', 'sortDirection'],
     });
@@ -240,7 +240,7 @@ AttachmentScanner.init = function({ id, version, rootURI }) {
                     } catch {
                         totalSize = -1;
                     }
-            } else {
+            } else if (item.isRegularItem()) {
                 let attachmentIDs = item.getAttachments();
                 for (attachmentID of attachmentIDs) {
                     let attachment = Zotero.Items.get(attachmentID);
@@ -611,6 +611,7 @@ AttachmentScanner.scanOrphans = async function(window) {
     if (this.preferenceDocument) this.preferencesChanged();
     await this.waitUntilfinishRename();  // even without preference window open, there is a slight chance that renaming is ongonig
 
+    let absFiles = 2;
     try {
         let baseDir = Zotero.Prefs.get("extensions.zotero.baseAttachmentPath", true);
         this.lenBaseDir = baseDir.length;
@@ -626,6 +627,11 @@ AttachmentScanner.scanOrphans = async function(window) {
                 let path = await attachment.getFilePathAsync();
                 if (!path) continue;
                 attachmentFiles.push(path.normalize('NFC').toLowerCase());
+
+                if (attachment.attachmentLinkMode == Zotero.Attachments.LINK_MODE_LINKED_FILE &&
+                    attachment.attachmentPath.indexOf(Zotero.Attachments.BASE_PATH_PLACEHOLDER) != 0 &&
+                    attachment.attachmentPath.startsWith(baseDir))
+                        absFiles++;
             }
         }
         log(`${attachmentFiles.length} attachment files are found.`);
@@ -638,9 +644,14 @@ AttachmentScanner.scanOrphans = async function(window) {
     }
 
     if (this.shouldCancelScan) return;
-    if (orphanFiles.length + junkFiles.length + emptyDirs.length == 0)
-        Services.prompt.alert(window, pluginName, this.getLocalizedString("attachmentscanner-no-orphan"));
-    else {
+    if (orphanFiles.length + junkFiles.length + emptyDirs.length == 0) {
+        if (absFiles == 0)
+            Services.prompt.alert(window, pluginName, this.getLocalizedString("attachmentscanner-no-orphan"));
+        else if (absFiles == 1)
+            Services.prompt.alert(window, pluginName, this.getLocalizedString("attachmentscanner-no-orphan-with-abs-1").replaceAll("{$abs}", absFiles));
+        else
+            Services.prompt.alert(window, pluginName, this.getLocalizedString("attachmentscanner-no-orphan-with-abs-n").replaceAll("{$abs}", absFiles));
+    } else {
         let s1 = (orphanFiles.length == 0) ? "" : (this.getLocalizedString("attachmentscanner-orphan-" +  ((orphanFiles.length == 1) ? "1" : "n")));
         let s2 = (junkFiles.length == 0)   ? "" : (this.getLocalizedString("attachmentscanner-junk-" +      ((junkFiles.length == 1) ? "1" : "n")));
         let s3 = (emptyDirs.length == 0)   ? "" : (this.getLocalizedString("attachmentscanner-empty-dir-" + ((emptyDirs.length == 1) ? "1" : "n")));
@@ -667,6 +678,11 @@ AttachmentScanner.scanOrphans = async function(window) {
         s = (orphanFiles.length == 0) ? "" : s1 + ":\n  " + orphanFiles.join("\n  ");
         if (junkFiles.length > 0) s += ((s == "") ? "" : "\n\n") + s2 + ":\n  " + junkFiles.join("\n  ");
         if (emptyDirs.length > 0) s += ((s == "") ? "" : "\n\n") + s3 + ":\n  " + emptyDirs.join("\n  ");
+        if (absFiles == 1)
+            s = this.getLocalizedString("attachmentscanner-abs-warning-1").replaceAll("{$abs}", absFiles) + "\n\n" + s;
+        else if (absFiles > 1)
+            s = this.getLocalizedString("attachmentscanner-abs-warning-n").replaceAll("{$abs}", absFiles) + "\n\n" + s;
+
         Components.classes["@mozilla.org/widget/clipboardhelper;1"]
             .getService(Components.interfaces.nsIClipboardHelper)
             .copyString(s);
