@@ -5,7 +5,7 @@ attachmentscanner-cancel-scan = 取消附件扫描
 attachmentscanner-scan-orphans = 扫描附件根目录中的多余文件
 attachmentscanner-remove-same-link = 移除指向同一文件的附件
 attachmentscanner-attachment-number = 附件数目
-attachmentscanner-attachment-size = 附件大小（极慢）
+attachmentscanner-attachment-size = 附件大小
 
 ## Message
 attachmentscanner-scan-title = 扫描附件

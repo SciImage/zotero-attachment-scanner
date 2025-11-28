@@ -5,7 +5,7 @@ attachmentscanner-cancel-scan = Cancel Attachment Scanning
 attachmentscanner-scan-orphans = Scan Attachment Base Directory for Orphaned Files
 attachmentscanner-remove-same-link = Delete attachements linked to the same file
 attachmentscanner-attachment-number = Attachement Number
-attachmentscanner-attachment-size = Attachment Size (SLOW)
+attachmentscanner-attachment-size = Attachment Size
 
 ## Message
 attachmentscanner-scan-title = Scanning attachements

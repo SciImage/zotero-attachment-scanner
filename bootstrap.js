@@ -9,7 +9,7 @@
 
 const pluginName  = "Attachment Scanner";
 const pluginId    = "attachmentscanner@changlab.um.edu.mo";
-const version     = "0.4.0";
+const version     = "0.4.1";
 const mainJS      = "attachmentscanner.js";             // This is the actual plugin code
 const mainFTL     = "attachmentscanner.ftl";            // Localization file
 const prefXHTML   = "preferences.xhtml";                // Document for the pref window

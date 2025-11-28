@@ -5,7 +5,7 @@ attachmentscanner-cancel-scan = 取消附加檔掃描
 attachmentscanner-scan-orphans = 掃描附加檔來源目錄中的多餘文檔
 attachmentscanner-remove-same-link = 刪除指向同一文檔的附加檔
 attachmentscanner-attachment-number = 附加檔數目
-attachmentscanner-attachment-size = 附加檔大小（極慢）
+attachmentscanner-attachment-size = 附加檔大小
 
 ## Message
 attachmentscanner-scan-title = 掃描附加檔
