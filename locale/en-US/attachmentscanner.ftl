@@ -3,12 +3,12 @@ attachmentscanner-start-scan = Scan All Attachments
 attachmentscanner-start-scan-selected = Scan Attachments of Selected Items
 attachmentscanner-cancel-scan = Cancel Attachment Scanning
 attachmentscanner-scan-orphans = Scan Attachment Base Directory for Orphaned Files
-attachmentscanner-remove-same-link = Delete attachements linked to the same file
+attachmentscanner-remove-same-link = Delete attachments linked to the same file
 attachmentscanner-attachment-number = Attachement Number
 attachmentscanner-attachment-size = Attachment Size
 
 ## Message
-attachmentscanner-scan-title = Scanning attachements
+attachmentscanner-scan-title = Scanning attachments
 attachmentscanner-scan-progreess = Scanning {$index} of {$total} items...
 attachmentscanner-error-auto-delete = Stop!!! ZotMoov is installed and its "Automatically Delete External Linked Files in the ZotMoov Directory" is on.
 attachmentscanner-warning-auto-delete = This may lead to file loss if ZotMoov-like plugins are installed and their auto file delete function is on. Do you want to continue?
