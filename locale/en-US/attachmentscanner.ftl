@@ -4,7 +4,7 @@ attachmentscanner-start-scan-selected = Scan Attachments of Selected Items
 attachmentscanner-cancel-scan = Cancel Attachment Scanning
 attachmentscanner-scan-orphans = Scan Attachment Base Directory for Orphaned Files
 attachmentscanner-remove-same-link = Delete attachments linked to the same file
-attachmentscanner-attachment-number = Attachement Number
+attachmentscanner-attachment-number = Attachment Number
 attachmentscanner-attachment-size = Attachment Size
 
 ## Message
@@ -55,7 +55,7 @@ attachmentscanner-section-more = Other options
 attachmentscanner-monitor-change =
     .label = Monitor attachments and update tags
 attachmentscanner-monospace-font =
-    .label = Use a monospace font for the “Attachement Size” column
+    .label = Use a monospace font for the “Attachment Size” column
 attachmentscanner-orphan-ignore =
     .label = Ignore
 attachmentscanner-orphan-report =
