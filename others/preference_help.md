@@ -36,7 +36,10 @@ Other Options
 ### Monitor attachments and update tags
 When enabled, the plugin will perform all selected checking operations, except “Remove missing attachments”, whenever an item or attachment is added or deleted from the library.
 
-### Use a monospace font for the “Attachement Size” column
+### Enable "Attachment Size" column
+When enabled (by default), the "Attachment Size" column lets you view and sort items by their size. Since this information isn't stored in the library and must be read from disk, disabling this feature reduces unnecessary disk activity. This is recommended if you don’t need the column, especially since Zotero loads all column data regardless of whether the column is visible.
+
+#### Use a monospace font for the “Attachement Size” column
 The default font used in the item table is proportional, which causes numbers to be misaligned and harder to compare. This option changes the font in the “Attachement Size” column to a fixed-width (monospace) font for better alignment and readability.
 
 ### Ignore/report/delete junk files

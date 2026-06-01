@@ -35,8 +35,7 @@ AttachmentScanner.getRegExFromText = function (regExps) {
 
 AttachmentScanner.getFileSize = function(filename) {
     if (!filename) return 0;
-    let file = Components.classes["@mozilla.org/file/local;1"]
-       .createInstance(Components.interfaces.nsIFile);
+    let file = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsIFile);
     file.initWithPath(filename);
     return file.fileSize;
 }
@@ -52,12 +51,17 @@ AttachmentScanner.readPref = function() {
     this.removeBroken       = this.getPref("remove_broken");
     this.monitorAttachments = this.getPref("monitor_attachments");
     this.monospaceFont      = this.getPref("monospace_font");
+    this.enableSizeColumn   = this.getPref("enable_size_column");
 
     this.regExs             = this.getRegExFromText(this.getPref("ignored_file_masks"));
     this.tagNosource        = this.getPrefDefault("tag_nosource",  this.simTag_Nosource);
     this.tagBroken          = this.getPrefDefault("tag_broken",    this.simTag_Broken);
     this.tagDuplicate       = this.getPrefDefault("tag_duplicate", this.simTag_Duplicate);
     this.tagNonfile         = this.getPrefDefault("tag_nonfile",   this.simTag_Nonfile);
+
+    this.check_link_mode    = this.getPref("check_link_mode");
+    this.tagLinked          = this.getPrefDefault("tag_linked",   "#linked");
+    this.tagStored          = this.getPrefDefault("tag_stored",   "#stored");
 }
 
 // === Change UI elements based on state/settings ===
@@ -82,13 +86,14 @@ AttachmentScanner.togglePreferenceItems = function() {
     const disabled = this.scanningState == 2;
     const disabledmore = disabled || this.scanningState == 1;
     if (doc) {
-        doc.getElementById("attachmentscanner_checkbox1").disabled = disabled;  // disabled of groupbox and vbox applied to inner elements
-        doc.getElementById("attachmentscanner_checkbox2").disabled = disabled;
-        doc.getElementById("attachmentscanner_checkbox3").disabled = disabled;
-        doc.getElementById("attachmentscanner_checkbox4").disabled = disabled;
-        doc.getElementById("attachmentscanner_checkbox5").disabled = disabled;
-        doc.getElementById("attachmentscanner_checkbox6").disabled = disabled;
+        doc.getElementById("attachmentscanner_cb_nsrc").disabled = disabled;  // disabled of groupbox and vbox applied to inner elements
+        doc.getElementById("attachmentscanner_cb_nfile").disabled = disabled;
+        doc.getElementById("attachmentscanner_cb_dupl").disabled = disabled;
+        doc.getElementById("attachmentscanner_cb_rmpm").disabled = disabled;
+        doc.getElementById("attachmentscanner_cb_rmss").disabled = disabled;
+        doc.getElementById("attachmentscanner_cb_rmbk").disabled = disabled;
         doc.getElementById("attachmentscanner_file_masks").disabled = disabled || !this.scanDuplicate;
+        doc.getElementById("attachmentscanner_cb_mono").disabled = !this.enableSizeColumn;
 
         doc.getElementById("attachmentscanner_junk_file").disabled = this.scanningState == 3;
 
@@ -154,6 +159,7 @@ AttachmentScanner.preferencesChanged = function() {
 
     // Update menu items
     this.updateHiddenMenuItem(Zotero.getMainWindow());
+    this.registerSizeColumn(this.enableSizeColumn);
 };
 
 AttachmentScanner.fontChanged = function() {
@@ -165,6 +171,22 @@ AttachmentScanner.fontChanged = function() {
         const cells = itemTable.getElementsByClassName("attachSize");
         for (let i = 0; i<cells.length; i++)
             cells[i].style = (this.monospaceFont) ? "text-Align: right; font-Family: monospace;" : "text-Align: right; ";
+    }
+}
+
+AttachmentScanner.duplicateSettingChanged = function() {
+    const doc = this.preferenceDocument;
+    if (doc) {
+        var elm = doc.getElementById("attachmentscanner_cb_dupl");
+        doc.getElementById("attachmentscanner_file_masks").disabled = elm.disabled || !elm.checked;
+    }
+}
+
+AttachmentScanner.enableSizeColumnChanged = function() {
+    const doc = this.preferenceDocument;
+    if (doc) {
+        var elm = doc.getElementById("attachmentscanner_cb_nscol");
+        doc.getElementById("attachmentscanner_cb_mono").disabled = !elm.checked;
     }
 }
 
@@ -195,6 +217,60 @@ AttachmentScanner.useEmojiTags = function(doc) {
 
 // === Init ===
 
+AttachmentScanner.registerSizeColumn = function(enabled) {
+    if (enabled) {
+        if (this.registeredAttachmentSize) return;
+        this.registeredAttachmentSize = Zotero.ItemTreeManager.registerColumn(
+        {
+            dataKey: 'asAttachmentSize',
+            label: this.getLocalizedString("attachmentscanner-attachment-size"),
+            htmlLabel: this.getLocalizedString("attachmentscanner-attachment-size"),
+            staticWidth: true,
+            showInColumnPicker: true,
+            pluginID: pluginId,
+            sortReverse: true,
+            dataProvider: (item, dataKey) => {
+                let totalSize = 0;
+                if (item.isFileAttachment()) {
+                    let parent = Zotero.Items.get(item.parentID);
+                    if (parent.numAttachments(false) > 1)
+                        try {
+                            totalSize = this.getFileSize(item.getFilePath());
+                        } catch {
+                            totalSize = -1;
+                        }
+                } else if (item.isRegularItem()) {
+                    let attachmentIDs = item.getAttachments();
+                    for (attachmentID of attachmentIDs) {
+                        let attachment = Zotero.Items.get(attachmentID);
+                        if (attachment.isFileAttachment())
+                            try {
+                                totalSize += this.getFileSize(attachment.getFilePath());
+                            } catch { }
+                    }
+                }
+                return totalSize;
+            },
+            renderCell: (index, data, column, isFirstColumn, doc) => {
+                const cell = doc.createElement('span');
+                cell.className = `cell ${column.className} attachSize`;
+                if (data < 0)
+                    cell.innerHTML = '???';
+                else cell.innerHTML = (data == 0) ? "" : data.toLocaleString();
+                if (this.monospaceFont)
+                  cell.style = "text-Align: right; font-Family: monospace;";
+                else cell.style = "text-Align: right; ";
+                return cell;
+            },
+            zoteroPersist: ['width', 'hidden', 'sortDirection'],
+        });
+    } else {
+        if (!this.registeredAttachmentSize) return;
+        Zotero.ItemTreeManager.unregisterColumn(this.registeredAttachmentSize);
+        this.registeredAttachmentSize = null;
+    }
+}
+
 AttachmentScanner.init = function({ id, version, rootURI }) {
     this.defineConsts();
     this.setPref("remove_broken", false);   // To be safe
@@ -216,55 +292,12 @@ AttachmentScanner.init = function({ id, version, rootURI }) {
         pluginID: pluginId,
         sortReverse: true,
         dataProvider: (item, dataKey) => {
-            return item.numAttachments(false);
+            var s = (item.isRegularItem()) ? item.numAttachments(false) : 0;
+            return (s != 0) ? s : null;
         },
         zoteroPersist: ['width', 'hidden', 'sortDirection'],
     });
-
-    this.registeredAttachmentSize = Zotero.ItemTreeManager.registerColumn(
-    {
-        dataKey: 'asAttachmentSize',
-        label: this.getLocalizedString("attachmentscanner-attachment-size"),
-        htmlLabel: this.getLocalizedString("attachmentscanner-attachment-size"),
-        staticWidth: true,
-        showInColumnPicker: true,
-        pluginID: pluginId,
-        sortReverse: true,
-        dataProvider: (item, dataKey) => {
-            let totalSize = 0;
-            if (item.isFileAttachment()) {
-                let parent = Zotero.Items.get(item.parentID);
-                if (parent.numAttachments(false) > 1)
-                    try {
-                        totalSize = this.getFileSize(item.getFilePath());
-                    } catch {
-                        totalSize = -1;
-                    }
-            } else {
-                let attachmentIDs = item.getAttachments();
-                for (attachmentID of attachmentIDs) {
-                    let attachment = Zotero.Items.get(attachmentID);
-                    if (attachment.isFileAttachment())
-                        try {
-                            totalSize += this.getFileSize(attachment.getFilePath());
-                        } catch { }
-                }
-            }
-            return totalSize;
-        },
-        renderCell: (index, data, column, isFirstColumn, doc) => {
-            const cell = doc.createElement('span');
-            cell.className = `cell ${column.className} attachSize`;
-            if (data < 0)
-                cell.innerHTML = '???';
-            else cell.innerHTML = (data == 0) ? "" : data.toLocaleString();
-            if (this.monospaceFont)
-              cell.style = "text-Align: right; font-Family: monospace;";
-            else cell.style = "text-Align: right; ";
-            return cell;
-        },
-        zoteroPersist: ['width', 'hidden', 'sortDirection'],
-    });
+    this.registerSizeColumn(this.enableSizeColumn);
 }
 
 AttachmentScanner.addToWindow = function(window) {
@@ -332,7 +365,7 @@ AttachmentScanner.onItemChange = {
 AttachmentScanner.checkAttachements = async function(item, skipSomeActions) { // return true if tags are changed
     if (!item.isRegularItem()) {    // isRegularItem = !(this.isNote() || this.isAttachment() || this.isAnnotation())
         if (item.parentID)
-           item = await Zotero.Items.getAsync(item.parentID);
+            item = await Zotero.Items.getAsync(item.parentID);
         if (!item.isRegularItem()) return;
     }
 
@@ -340,7 +373,7 @@ AttachmentScanner.checkAttachements = async function(item, skipSomeActions) { //
     // Get all attachments
     let attachmentIDs = item.getAttachments();
     let attachTypes = [];
-    let hasFile = hasBroken = hasDuplicates = hasNonfiles = changed = hasPDF = false;
+    let hasFile = hasBroken = hasDuplicates = hasNonfiles = changed = hasPDF = hasStored = hasLinked = false;
     let pubmedEntryID = null;
     let snapshotID = null;
 
@@ -354,7 +387,7 @@ AttachmentScanner.checkAttachements = async function(item, skipSomeActions) { //
 
     // Zotero provide these function to test attachment types
     //   isImportedAttachment: for 0,1; isStoredFileAttachment: for 0,1,4; isWebAttachment: for 1,3,4;
-    //   isFileAttachment: for 0,1,2,4; isLinkedFileAttachment: for 2l     isEmbeddedImageAttachment: for 4;
+    //   isFileAttachment: for 0,1,2,4; isLinkedFileAttachment: for 2;     isEmbeddedImageAttachment: for 4;
     //   isSnapshotAttachment: for 1 and HTML
     //   numAttachments/numFileAttachments/numNonHTMLFileAttachments
 
@@ -366,7 +399,10 @@ AttachmentScanner.checkAttachements = async function(item, skipSomeActions) { //
             continue;
         }
         if (attachment.isFileAttachment()) {
-            // sets hasFile, hasBroken
+            // set hasStored, hasLinked, hasFile
+            if (attachment.isStoredFileAttachment())
+                hasStored = true;
+            else hasLinked = true;
             hasFile = true;
             let filename = "";
 
@@ -433,6 +469,12 @@ AttachmentScanner.checkAttachements = async function(item, skipSomeActions) { //
     if (this.scanNonfile) {
         if (!hasNonfiles && item.hasTag(this.tagNonfile)) { changed = true; item.removeTag(this.tagNonfile); }
         if (hasNonfiles && !item.hasTag(this.tagNonfile)) { changed = true; item.addTag(this.tagNonfile); }
+    }
+    if (this.check_link_mode) {
+        if (!hasLinked && item.hasTag(this.tagLinked)) { changed = true; item.removeTag(this.tagLinked); }
+        if (hasLinked && !item.hasTag(this.tagLinked)) { changed = true; item.addTag(this.tagLinked); }
+        if (!hasStored && item.hasTag(this.tagStored)) { changed = true; item.removeTag(this.tagStored); }
+        if (hasStored && !item.hasTag(this.tagStored)) { changed = true; item.addTag(this.tagStored); }
     }
 
     if (changed) item.saveTx();
@@ -530,7 +572,7 @@ AttachmentScanner.checkSameFile = async function(aItem) {
             if (attachment.isFileAttachment()) {
                 let filename;
                 try {
-                     filename = await attachment.getFilePathAsync();
+                    filename = await attachment.getFilePathAsync();
                 } catch {
                 }
                 if (!filename) continue;
@@ -594,11 +636,11 @@ AttachmentScanner.scanOrphans = async function(window) {
                 if (attachmentFiles.includes(entry.normalize('NFC').toLowerCase()))
                     hasFiles = true;
                 else if (osJunkFiles.includes(entry.split('\\').pop().split('/').pop().toLowerCase())) {
-                        if (op == 1)
-                            junkFiles.push(entry);
-                        else if (op == 2)
-                            IOUtils.remove(entry);
-                    } else orphanFiles.push(entry);
+                    if (op == 1)
+                        junkFiles.push(entry);
+                    else if (op == 2)
+                        IOUtils.remove(entry);
+                } else orphanFiles.push(entry);
             }
         }
         return hasFiles;
@@ -611,6 +653,7 @@ AttachmentScanner.scanOrphans = async function(window) {
     if (this.preferenceDocument) this.preferencesChanged();
     await this.waitUntilfinishRename();  // even without preference window open, there is a slight chance that renaming is ongonig
 
+    let absFiles = 0;
     try {
         let baseDir = Zotero.Prefs.get("extensions.zotero.baseAttachmentPath", true);
         this.lenBaseDir = baseDir.length;
@@ -626,6 +669,11 @@ AttachmentScanner.scanOrphans = async function(window) {
                 let path = await attachment.getFilePathAsync();
                 if (!path) continue;
                 attachmentFiles.push(path.normalize('NFC').toLowerCase());
+
+                if (attachment.attachmentLinkMode == Zotero.Attachments.LINK_MODE_LINKED_FILE &&
+                    attachment.attachmentPath.indexOf(Zotero.Attachments.BASE_PATH_PLACEHOLDER) != 0 &&
+                    attachment.attachmentPath.startsWith(baseDir))
+                    absFiles++;
             }
         }
         log(`${attachmentFiles.length} attachment files are found.`);
@@ -638,9 +686,14 @@ AttachmentScanner.scanOrphans = async function(window) {
     }
 
     if (this.shouldCancelScan) return;
-    if (orphanFiles.length + junkFiles.length + emptyDirs.length == 0)
-        Services.prompt.alert(window, pluginName, this.getLocalizedString("attachmentscanner-no-orphan"));
-    else {
+    if (orphanFiles.length + junkFiles.length + emptyDirs.length == 0) {
+        if (absFiles == 0)
+            Services.prompt.alert(window, pluginName, this.getLocalizedString("attachmentscanner-no-orphan"));
+        else if (absFiles == 1)
+            Services.prompt.alert(window, pluginName, this.getLocalizedString("attachmentscanner-no-orphan-with-abs-1").replaceAll("{$abs}", absFiles));
+        else
+            Services.prompt.alert(window, pluginName, this.getLocalizedString("attachmentscanner-no-orphan-with-abs-n").replaceAll("{$abs}", absFiles));
+    } else {
         let s1 = (orphanFiles.length == 0) ? "" : (this.getLocalizedString("attachmentscanner-orphan-" +  ((orphanFiles.length == 1) ? "1" : "n")));
         let s2 = (junkFiles.length == 0)   ? "" : (this.getLocalizedString("attachmentscanner-junk-" +      ((junkFiles.length == 1) ? "1" : "n")));
         let s3 = (emptyDirs.length == 0)   ? "" : (this.getLocalizedString("attachmentscanner-empty-dir-" + ((emptyDirs.length == 1) ? "1" : "n")));
@@ -655,8 +708,8 @@ AttachmentScanner.scanOrphans = async function(window) {
             sAll = s1 + ((s1 != "" && s2 + s3 != "") ? this.getLocalizedString("attachmentscanner-last-separator") : "") + s2 + s3;
 
         let s = (orphanFiles.length + junkFiles.length + emptyDirs.length == 1) ?
-                  (this.getLocalizedString("attachmentscanner-orphan-found-1")) :
-                  (this.getLocalizedString("attachmentscanner-orphan-found-n"));
+                    (this.getLocalizedString("attachmentscanner-orphan-found-1")) :
+                    (this.getLocalizedString("attachmentscanner-orphan-found-n"));
         s = s.replaceAll("{$found}", sAll).replaceAll("{$orphan}", orphanFiles.length).replaceAll("{$junk}", junkFiles.length).replaceAll("{$empty-dir}", emptyDirs.length);
 
         Services.prompt.confirmEx(window, pluginName, s,
@@ -667,6 +720,11 @@ AttachmentScanner.scanOrphans = async function(window) {
         s = (orphanFiles.length == 0) ? "" : s1 + ":\n  " + orphanFiles.join("\n  ");
         if (junkFiles.length > 0) s += ((s == "") ? "" : "\n\n") + s2 + ":\n  " + junkFiles.join("\n  ");
         if (emptyDirs.length > 0) s += ((s == "") ? "" : "\n\n") + s3 + ":\n  " + emptyDirs.join("\n  ");
+        if (absFiles == 1)
+            s = this.getLocalizedString("attachmentscanner-abs-warning-1").replaceAll("{$abs}", absFiles) + "\n\n" + s;
+        else if (absFiles > 1)
+            s = this.getLocalizedString("attachmentscanner-abs-warning-n").replaceAll("{$abs}", absFiles) + "\n\n" + s;
+
         Components.classes["@mozilla.org/widget/clipboardhelper;1"]
             .getService(Components.interfaces.nsIClipboardHelper)
             .copyString(s);

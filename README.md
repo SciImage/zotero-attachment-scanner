@@ -12,6 +12,7 @@ Plugin Functions and Features
   - Optionally, remove all “PubMed entry” attachments
   - Optionally, remove snapshots from items that have PDF/EPUB attachments
   - Optionally, remove missing attachments (*Use with caution*)
+  - Optionally (hidden, see Technical Notes), add tags to items with stored/linked attachements.
 - Scan Attachment Base Directory for files that are not linked to Zotero's items
 - Add customized columns to the item table
   - Attachement Number
@@ -55,13 +56,11 @@ Usage
 > The function only scans and copies the list of files to the clipboard. It does not delete any files. I have *no plans* to add file removal functionality, as it results in irreversible data loss.
 
 ### Add columns
-1. Right-click on the header of the item table, select “Attachment Size (SLOW)” or “Attachment Number” from the popup menu.
-> [!NOTE]
-> “Attachment Size (SLOW)” is for managing attachments. Because attachment size isn't stored in the library and must be read from disk each time an item is displayed, showing the column or using it for sorting could lead to significant performance issues. For that reason, users should *hide the column* and *use other fields for sorting* once they're done managing attachments.<br/>
-> “Attachment Number” does not have performance issue.
+1. Right-click on the header of the item table, select “Attachment Size” or “Attachment #” from the popup menu.
+![Add columns](/others/columns.png?raw=true "Add columns")
 
 ### Settings
-See [here](https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md)  for more details.
+See [here](https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md)  for details.
 ![Preference window](/others/preference.png?raw=true "Preference window")
 
 Technical Notes
@@ -74,3 +73,4 @@ Technical Notes
 6. Some library items have multiple attachments linking to the same file. The plugin includes a menu command to delete these duplicates. By default, this command is hidden because it can cause **FILE LOSS** if **[ZotMoov](https://github.com/wileyyugioh/zotmoov)** is installed and its “Auto Delete External Linked Files” feature is enabled. To display the menu command, set `extensions.attachmentscanner.show_remove_same_file` to `true` in Zotero's [Config Editor](https://www.zotero.org/support/preferences/hidden_preferences). It is strongly recommended that users set this option back to `false` after using it.
 > [!CAUTION]
 > **Identical file removal** should never be used alongside any plugins with automatic file-deleting functions. During scanning, this plugin only moves the duplicated attachments to the Trash, so no files are lost initially. However, when the Trash is emptied, **ZotMoov** will delete the file from the disk, leading to unexpected file loss.
+7. The plugin can add a tag (default: `#stored`) to items with attachement(s) imported to Zotero's storage, and a tag (default: `#linked`) to items with linked attachement(s). The function is disabled and hidden by default. To turn it on, set `extensions.attachmentscanner.check_link_mode` to `true` in Zotero's [Config Editor](https://www.zotero.org/support/preferences/hidden_preferences). Change `extensions.attachmentscanner.tag_stored` and `extensions.attachmentscanner.tag_linked` to use customized tags.

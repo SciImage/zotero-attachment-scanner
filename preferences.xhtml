@@ -6,19 +6,19 @@
   <groupbox>
     <vbox>
       <label><html:h2 label="" data-l10n-id="attachmentscanner-section-scanning"/></label>
-      <checkbox native="true" id="attachmentscanner_checkbox1" preference="extensions.attachmentscanner.scan_nosource" data-l10n-id="attachmentscanner-scan-nosource" />
-      <checkbox native="true" id="attachmentscanner_checkbox2" preference="extensions.attachmentscanner.scan_nonfiles" data-l10n-id="attachmentscanner-scan-nonfiles" />
-      <checkbox native="true" id="attachmentscanner_checkbox3" preference="extensions.attachmentscanner.scan_duplicates" data-l10n-id="attachmentscanner-scan-duplicates" onclick="Zotero.AttachmentScanner.duplicateSettingChanged();"/>
+      <checkbox native="true" id="attachmentscanner_cb_nsrc" preference="extensions.attachmentscanner.scan_nosource" data-l10n-id="attachmentscanner-scan-nosource" />
+      <checkbox native="true" id="attachmentscanner_cb_nfile" preference="extensions.attachmentscanner.scan_nonfiles" data-l10n-id="attachmentscanner-scan-nonfiles" />
+      <checkbox native="true" id="attachmentscanner_cb_dupl" preference="extensions.attachmentscanner.scan_duplicates" data-l10n-id="attachmentscanner-scan-duplicates" oncommand="Zotero.AttachmentScanner.duplicateSettingChanged();" />
       <hbox align="center" style="margin-left: 28px;">
         <label for="attachmentscanner_file_masks" data-l10n-id="attachmentscanner-ignore-file-masks"/>
         <html:input type="text" id="attachmentscanner_file_masks" data-l10n-id="attachmentscanner-masks-hint" preference="extensions.attachmentscanner.ignored_file_masks" style="flex: 1;"/>
         <label is="zotero-text-link" id="attachmentscanner_help1" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#scan-items-for-duplicate-same-type-attachments" style="maring-right: 8px; margin-left: 2px; text-decoration: none;">?</label>
       </hbox>
-      <checkbox native="true" id="attachmentscanner_checkbox4" preference="extensions.attachmentscanner.remove_pubmed_entry" data-l10n-id="attachmentscanner-remove-pubmed-entry" />
-      <checkbox native="true" id="attachmentscanner_checkbox5" preference="extensions.attachmentscanner.remove_snapshot" data-l10n-id="attachmentscanner-remove-snapshot" />
+      <checkbox native="true" id="attachmentscanner_cb_rmpm" preference="extensions.attachmentscanner.remove_pubmed_entry" data-l10n-id="attachmentscanner-remove-pubmed-entry" />
+      <checkbox native="true" id="attachmentscanner_cb_rmss" preference="extensions.attachmentscanner.remove_snapshot" data-l10n-id="attachmentscanner-remove-snapshot" />
       <hbox align="center">
-        <checkbox native="true" id="attachmentscanner_checkbox6" preference="extensions.attachmentscanner.remove_broken" data-l10n-id="attachmentscanner-remove-broken" />
-        <label is="zotero-text-link" id="attachmentscanner_help1" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#remove-missing-attachments" style="maring-right: 8px; margin-left: 2px; text-decoration: none;">?</label>
+        <checkbox native="true" id="attachmentscanner_cb_rmbk" preference="extensions.attachmentscanner.remove_broken" data-l10n-id="attachmentscanner-remove-broken" />
+        <label is="zotero-text-link" id="attachmentscanner_help2" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#remove-missing-attachments" style="margin-left: 6px; text-decoration: none;">?</label>
       </hbox>
     </vbox>
   </groupbox>
@@ -26,14 +26,20 @@
   <groupbox>
     <vbox>
       <label><html:h2 label="" data-l10n-id="attachmentscanner-section-more"/></label>
-      <checkbox native="true" id="attachmentscanner_checkbox7" preference="extensions.attachmentscanner.monitor_attachments" data-l10n-id="attachmentscanner-monitor-change" />
-      <checkbox native="true" id="attachmentscanner_checkbox8" preference="extensions.attachmentscanner.monospace_font" data-l10n-id="attachmentscanner-monospace-font" />
-        <radiogroup orient="horizontal" id="attachmentscanner_junk_file" preference="extensions.attachmentscanner.junk_orphan_files">
-          <radio id="attachmentscanner_ignore_junk" data-l10n-id="attachmentscanner-orphan-ignore" value="0"/>
-          <radio id="attachmentscanner_report_junk" data-l10n-id="attachmentscanner-orphan-report" value="1"/>
-          <radio id="attachmentscanner_delete_junk" data-l10n-id="attachmentscanner-orphan-delete" value="2"/>
-          <label data-l10n-id="attachmentscanner-orphan-files" style="flex: 1; margin-left: 10px"/>
-        </radiogroup>
+      <checkbox native="true" id="attachmentscanner_cb_mon" preference="extensions.attachmentscanner.monitor_attachments" data-l10n-id="attachmentscanner-monitor-change" />
+      <hbox align="center">
+        <checkbox native="true" id="attachmentscanner_cb_nscol" preference="extensions.attachmentscanner.enable_size_column" data-l10n-id="attachmentscanner-enable-size-column" oncommand="Zotero.AttachmentScanner.enableSizeColumnChanged();" />
+        <label is="zotero-text-link" id="attachmentscanner_help3" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#enable-%E2%80%9Cattachment-size%E2%80%9D-column" style="margin-left: 6px; text-decoration: none;">?</label>
+      </hbox>
+      <hbox style="margin-left: 28px;">
+        <checkbox native="true" id="attachmentscanner_cb_mono" preference="extensions.attachmentscanner.monospace_font" data-l10n-id="attachmentscanner-monospace-font" />
+      </hbox>
+      <radiogroup orient="horizontal" id="attachmentscanner_junk_file" preference="extensions.attachmentscanner.junk_orphan_files">
+        <radio id="attachmentscanner_ignore_junk" data-l10n-id="attachmentscanner-orphan-ignore" value="0"/>
+        <radio id="attachmentscanner_report_junk" data-l10n-id="attachmentscanner-orphan-report" value="1"/>
+        <radio id="attachmentscanner_delete_junk" data-l10n-id="attachmentscanner-orphan-delete" value="2"/>
+        <label data-l10n-id="attachmentscanner-orphan-files" style="flex: 1; margin-left: 10px"/>
+      </radiogroup>
     </vbox>
   </groupbox>
 

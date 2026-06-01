@@ -9,7 +9,7 @@
 
 const pluginName  = "Attachment Scanner";
 const pluginId    = "attachmentscanner@changlab.um.edu.mo";
-const version     = "0.4.0";
+const version     = "0.5.0";
 const mainJS      = "attachmentscanner.js";             // This is the actual plugin code
 const mainFTL     = "attachmentscanner.ftl";            // Localization file
 const prefXHTML   = "preferences.xhtml";                // Document for the pref window
@@ -333,6 +333,7 @@ function onMainWindowUnload({ window }) {
 function shutdown() {
     log("Shutting down...");
     pluginObj.removeFromAllWindows();
+    if (pluginObj.cleanUp) pluginObj.cleanUp();
     if (pluginObj.collectionNotifierID)     Zotero.Notifier.unregisterObserver(pluginObj.collectionNotifierID);
     if (pluginObj.collectionItemNotifierID) Zotero.Notifier.unregisterObserver(pluginObj.collectionItemNotifierID);
     if (pluginObj.itemNotifierID)           Zotero.Notifier.unregisterObserver(pluginObj.itemNotifierID);
