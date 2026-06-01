@@ -12,18 +12,18 @@ Plugin Functions and Features
   - Optionally, remove all “PubMed entry” attachments
   - Optionally, remove snapshots from items that have PDF/EPUB attachments
   - Optionally, remove missing attachments (*Use with caution*)
-  - Optionally (hidden, see Technical Notes), add tags to items with stored/linked attachements.
+  - Optionally (hidden, see Technical Notes), add tags to items with stored/linked attachments.
 - Scan Attachment Base Directory for files that are not linked to Zotero's items
 - Add customized columns to the item table
-  - Attachement Number
-  - Total Attachement Size
+  - Attachment Number
+  - Total Attachment Size
 - Identical file removal (hidden, see Technical Notes): delete attachments linking to the same file.
 
 ### Features
 - Customizable tags: You can use any tags; three predefined sets of tags are available with a click.
 - Tag updating: Customization applies to all existing tags without rescanning.
 - Progress tracking: The scanning progress is displayed in a window.
-- Job cancelling: The scanning can be cancelled.
+- Job cancellation: The scanning can be cancelled.
 - Real-time monitoring: Adding or deleting attachments triggers automatic tag updates.
 
 > [!CAUTION]
@@ -47,17 +47,17 @@ Usage
 ### Check Attachment Integrity
 1. Start scanning all items by selecting the “Scan All Attachments” menu item in the “Tools” menu, or
 2. Select some items and start scanning by selecting the “Scan Attachments of Selected Items” menu item in the right-click menu.
-3. Click “Cancel Attachment Scanning” menu item in the “Tools” menu to cancel a scan.
+3. Click the “Cancel Attachment Scanning” menu item in the “Tools” menu to cancel a scan.
 
 ### Check files in the Attachment Base Directory
-1. Select “Scan Attachment Base Directory for Orphaned Files” menu item in the “Tools” menu. The menu item is only available when the Attachment Base Directory is set.
-2. Click “Cancel Attachment Scanning” menu item in the “Tools” menu to cancel.
+1. Select the “Scan Attachment Base Directory for Orphaned Files” menu item in the “Tools” menu. The menu item is only available when the Attachment Base Directory is set.
+2. Click the “Cancel Attachment Scanning” menu item in the “Tools” menu to cancel.
 > [!NOTE]
 > The function only scans and copies the list of files to the clipboard. It does not delete any files. I have *no plans* to add file removal functionality, as it results in irreversible data loss.
 
 ### Add columns
-1. Right-click on the header of the item table, select “Attachment Size” or “Attachment #” from the popup menu.
-![Add columns](/others/columns.png?raw=true "Add columns")
+1. Right-click on the header of the item table, select “Attachment Size” or “Attachment #” from the pop-up menu.
+<center><img src="/others/columns.png" alt="Add columns" width="50%"/></center>
 
 ### Settings
 See [here](https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md)  for details.
@@ -65,12 +65,12 @@ See [here](https://github.com/SciImage/zotero-attachment-scanner/blob/main/other
 
 Technical Notes
 -----
-1. Zotero can have regular file attachments and non-file attachements. The “PubMed entry” attachments are a type of non-file attachements.
-2. Each file attachment has a “content type”, similar to a [MIME type](https://en.wikipedia.org/wiki/Media_type), which is primarily determined by the file's extension. “Duplicate attachments of the same type” refer to multiple files with the same content type, such as two PDF files or three .xlsx files. However, a PDF file and a .xlsx file are not considered duplicates because they have different content types.
+1. Zotero can have regular file attachments and non-file attachments. The “PubMed entry” attachments are a type of non-file attachment.
+2. Each file attachment has a “content type”, similar to a [MIME type](https://en.wikipedia.org/wiki/Media_type), which is primarily determined by the file's extension. “Duplicate attachments of the same type” refers to multiple files with the same content type, such as two PDF files or three .xlsx files. However, a PDF file and a .xlsx file are not considered duplicates because they have different content types.
 3. Zotero has a bug where the icons in the context menu do not appear the first time the menu is displayed. It can't be fixed by a plugin.
-4. Zotero has a bug on Mac: where the main window is closed and reopened, some main menu items disappear or lose their icons. This is fixed by the plugin.
+4. Zotero has a bug on Mac: when the main window is closed and reopened, some main menu items disappear or lose their icons. This is fixed by the plugin.
 5. Zotero has a setting that allows “Automatically take snapshots when creating items from web pages”. Turning it off can prevent the creation of snapshots.
 6. Some library items have multiple attachments linking to the same file. The plugin includes a menu command to delete these duplicates. By default, this command is hidden because it can cause **FILE LOSS** if **[ZotMoov](https://github.com/wileyyugioh/zotmoov)** is installed and its “Auto Delete External Linked Files” feature is enabled. To display the menu command, set `extensions.attachmentscanner.show_remove_same_file` to `true` in Zotero's [Config Editor](https://www.zotero.org/support/preferences/hidden_preferences). It is strongly recommended that users set this option back to `false` after using it.
 > [!CAUTION]
 > **Identical file removal** should never be used alongside any plugins with automatic file-deleting functions. During scanning, this plugin only moves the duplicated attachments to the Trash, so no files are lost initially. However, when the Trash is emptied, **ZotMoov** will delete the file from the disk, leading to unexpected file loss.
-7. The plugin can add a tag (default: `#stored`) to items with attachement(s) imported to Zotero's storage, and a tag (default: `#linked`) to items with linked attachement(s). The function is disabled and hidden by default. To turn it on, set `extensions.attachmentscanner.check_link_mode` to `true` in Zotero's [Config Editor](https://www.zotero.org/support/preferences/hidden_preferences). Change `extensions.attachmentscanner.tag_stored` and `extensions.attachmentscanner.tag_linked` to use customized tags.
+7. The plugin can add a tag (default: `#stored`) to items with attachment(s) imported to Zotero's storage, and a tag (default: `#linked`) to items with linked attachment(s). The function is disabled and hidden by default. To turn it on, set `extensions.attachmentscanner.check_link_mode` to `true` in Zotero's [Config Editor](https://www.zotero.org/support/preferences/hidden_preferences). Change `extensions.attachmentscanner.tag_stored` and `extensions.attachmentscanner.tag_linked` to use customized tags.
