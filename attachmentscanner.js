@@ -46,6 +46,7 @@ AttachmentScanner.readPref = function() {
     this.scanNosource       = this.getPref("scan_nosource");
     this.scanNonfile        = this.getPref("scan_nonfiles");
     this.scanDuplicate      = this.getPref("scan_duplicates");
+    this.noImportedUrl      = this.getPref("skip_zotero_storage");
     this.removePubmedEntry  = this.getPref("remove_pubmed_entry");
     this.removeSnapshot     = this.getPref("remove_snapshot");
     this.removeBroken       = this.getPref("remove_broken");
@@ -90,6 +91,7 @@ AttachmentScanner.togglePreferenceItems = function() {
         doc.getElementById("attachmentscanner_cb_nfile").disabled = disabled;
         doc.getElementById("attachmentscanner_cb_dupl").disabled = disabled;
         doc.getElementById("attachmentscanner_cb_rmpm").disabled = disabled;
+        doc.getElementById("attachmentscanner_cb_nozs").disabled = disabled;
         doc.getElementById("attachmentscanner_cb_rmss").disabled = disabled;
         doc.getElementById("attachmentscanner_cb_rmbk").disabled = disabled;
         doc.getElementById("attachmentscanner_file_masks").disabled = disabled || !this.scanDuplicate;
@@ -408,10 +410,14 @@ AttachmentScanner.checkAttachements = async function(item, skipSomeActions) { //
 
             // On Linux, when the path (attachment.attachmentPath) is in DOS format, getFilePathAsync will fail
             try {
-                filename = await attachment.getFilePathAsync();
-                if (filename) {
+                if (this.noImportedUrl && attachment.attachmentLinkMode == Zotero.Attachments.LINK_MODE_IMPORTED_URL) {
                     if (attachment.isPDFAttachment() || attachment.isEPUBAttachment()) hasPDF = true;
-                } else hasBroken = true;
+                } else {
+                    filename = await attachment.getFilePathAsync();
+                    if (filename) {
+                       if (attachment.isPDFAttachment() || attachment.isEPUBAttachment()) hasPDF = true;
+                    } else hasBroken = true;
+                }
             } catch {
                 hasBroken = true;
             }

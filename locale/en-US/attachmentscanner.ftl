@@ -35,6 +35,8 @@ attachmentscanner-prefs-title = Attachments
 
 ## Settings - Options
 attachmentscanner-section-scanning = Scanning options
+attachmentscanner-skip-zetero-storage =
+    .label = Skip attachments in Zotero Storage
 attachmentscanner-scan-nosource =
     .label = Tag items without file attachment
 attachmentscanner-scan-nonfiles =

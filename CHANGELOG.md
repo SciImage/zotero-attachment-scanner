@@ -1,6 +1,9 @@
 # Attachment Scanner Change log
 
-## 0.5.0, 2025-06-01
+## 0.5.1, 2026-07-29
+- Add an option to skip scanning attachments in Zotero Storage.
+
+## 0.5.0, 2026-06-01
 - Add an option to enable/disable the "Attachment Size" column
 - Add a hidden option to tag items based the link mode (stored vs linked) of their attachments
 - Changes: The "Attachement #" column now shows "" instead of "0"

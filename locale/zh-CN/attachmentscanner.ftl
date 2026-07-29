@@ -35,6 +35,8 @@ attachmentscanner-prefs-title = 附件管理
 
 ## Settings - Options
 attachmentscanner-section-scanning = 扫描选项
+attachmentscanner-skip-zetero-storage =
+    .label = 忽略存于 Zotero存储 的文件
 attachmentscanner-scan-nosource =
     .label = 为没有文件类附件的条目加上标签
 attachmentscanner-scan-nonfiles =

@@ -35,6 +35,8 @@ attachmentscanner-prefs-title = 附加檔管理
 
 ## Settings - Options
 attachmentscanner-section-scanning = 掃描選項
+attachmentscanner-skip-zetero-storage =
+    .label = 忽略存於 Zotero儲存空間 的附加檔
 attachmentscanner-scan-nosource =
     .label = 為沒有文檔類附加檔的項目加上標籤
 attachmentscanner-scan-nonfiles =

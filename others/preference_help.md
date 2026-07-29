@@ -19,6 +19,9 @@ Attachments with file names matching these masks will be ignored during duplicat
 - `abc/i; def `: matches names with either “abc” (case-insensitive) or “def” (case-sensitive).
 - `/ abc; def `: matches names with either “ abc” or “def”, case-sensitive.
 
+#### Skip attachments in Zotero Storage
+Some attachments in Zotero Storage are downloaded on demand from online storage. Check this option to avoid flagging these attachments as broken.
+
 ### Remove all “PubMed entry” attachments
 When enabled, the plugin removes all non-file attachments whose names are “PubMed entry”. These attachments are added by Zotero to items from PubMed and some journals.
 

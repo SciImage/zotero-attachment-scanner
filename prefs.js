@@ -1,6 +1,7 @@
 pref("extensions.attachmentscanner.scan_nosource", true);
 pref("extensions.attachmentscanner.scan_nonfiles", false);
 pref("extensions.attachmentscanner.scan_duplicates", true);
+pref("extensions.attachmentscanner.skip_zotero_storage", false);
 pref("extensions.attachmentscanner.remove_pubmed_entry", false);
 pref("extensions.attachmentscanner.remove_snapshot", false);
 pref("extensions.attachmentscanner.remove_broken", false);
