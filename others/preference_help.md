@@ -1,8 +1,13 @@
 Attachment Scanner Settings
 =======
 
+**English** | [繁體中文](preference_help.zh-TW.md) | [简体中文](preference_help.zh-CN.md)
+
+<center><img src="preference.png" alt="Add columns" width="50%"/></center>
+
 Scanning Options
 -------
+
 Turn on/off specific functions.
 ### Tag items without file attachment
 When enabled, the plugin tags items with the “No attachment” tag if they lack file attachments, even if they have non-file attachments.
@@ -13,13 +18,29 @@ When enabled, the plugin tags items with non-file attachments with the “Non-fi
 ### Scan items for duplicate same-type attachments
 When enabled, the plugin tags items with the “Duplicate attachments” tag if they have two or more attachments of the same content type. The content type, similar to a [MIME type](https://en.wikipedia.org/wiki/Media_type), is mainly determined by the file’s extension. For instance, items with two PDF attachments are considered duplicates, whereas an item with a PDF and a .xlsx attachment is not.
 
-#### Ignore files whose names contain
+#### Exclude files whose names contain
 Attachments with file names matching these masks will be ignored during duplicate checking. Separate multiple masks with a semicolon (`;`). Internally, these masks are trimmed and converted to RegEx. Examples,
 - `abc; [dD]ef `: matches names with either “abc”, “def” or “Def”, case-sensitive.
 - `abc/i; def `: matches names with either “abc” (case-insensitive) or “def” (case-sensitive).
 - `/ abc; def `: matches names with either “ abc” or “def”, case-sensitive.
 
-#### Skip attachments in Zotero Storage
+### Exclude specific item types
+Each Zotero item has an associated [item type](https://www.zotero.org/support/kb/item_types_and_fields). Some item types may include a URL but not an attachment. This field specifies the item types to exclude from checking, separated by commas. If not specified, the value defaults to `default`, which corresponds to
+- `annotation, attachment, note, blogPost, computerProgram, email, forumPost, instantMessage, podcast, radioBroadcast, tvBroadcast, webpage`
+
+Use Zotero's internal item type names and do not include spaces. Zotero defines the following item types. See the [ See the official documentation](https://www.zotero.org/support/kb/item_types_and_fields) for details.
+
+- You should generally not exclude: `book`, `bookSection`, `conferencePaper`, `document`,  `journalArticle`, `manuscript`, `preprint`, `report`, `standard`, `thesis`
+- You may exclude, but generally should not: `bill`, `case`, `dictionaryEntry`, `encyclopediaArticle`, `hearing`, `interview`, `letter`, `magazineArticle`, `newspaperArticle`, `patent`, `statute`
+- Types used internally by Zotero: `annotation`, `attachment`, `note`
+- Types associated with local or external data: `artwork`, `audioRecording`, `dataset`, `film`, `map`, `presentation`, `videoRecording`
+- Types typically associated with online content: `blogPost`, `computerProgram`, `email`, `forumPost`, `instantMessage`, `podcast`, `radioBroadcast`, `tvBroadcast`, `webpage`
+
+Examples:
+- `default`: Do not checl item types used internally by Zotero and those that typically reference online content.
+- `webpage, dictionaryEntry`: Do not checl items that reference web pages or dictionary entries.
+
+### Skip attachments in Zotero Storage
 Some attachments in Zotero Storage are downloaded on demand from online storage. Check this option to avoid flagging these attachments as broken.
 
 ### Remove all “PubMed entry” attachments
@@ -36,6 +57,7 @@ When enabled, missing attachments will be removed from items. This will not be m
 
 Other Options
 -------
+
 ### Monitor attachments and update tags
 When enabled, the plugin will perform all selected checking operations, except “Remove missing attachments”, whenever an item or attachment is added or deleted from the library.
 
@@ -50,6 +72,7 @@ When scanning the “Attachment Base Directory” for orphan files—those not l
 
 Tags for items with unusual attachments
 -------
+
 Customize the tags used. After changing the tags, items with the old tags will be updated once this settings window loses focus or when a scan is initiated.
 
 Click one of the three buttons to use the preset tags.

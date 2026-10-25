@@ -1,7 +1,7 @@
 Attachment Scanner（Zotero v.7.0+ 附件扫描器）
 =====
 
-[English](README.md) | **简体中文**
+[English](README.md) | [繁體中文](README.zh-TW.md) | **简体中文**
 
 **Attachment Scanner** 是一款 **[Zotero](https://www.zotero.org/)** 插件，用于扫描附件，并为没有附件、附件缺失或附件重复的条目添加标签。其功能类似于 **[Zotero Storage Scanner](https://github.com/retorquere/zotero-storage-scanner)** 插件，但兼容 Zotero v.7.0。后续更新还引入了多项附件相关功能，包括实时监控、多余文件扫描、网页快照移除以及可自定义的栏位。
 
@@ -37,12 +37,12 @@ Attachment Scanner（Zotero v.7.0+ 附件扫描器）
 -----
 ### 全新安装
    1. 从 [最新发布版本](https://github.com/SciImage/zotero-attachment-scanner/releases/latest) 下载 .xpi 文件（Firefox 用户：右键并另存文件）。
-   2. 打开 Zotero 插件界面（菜单 --> 工具 --> 插件）。
+   2. 打开 Zotero 插件界面（菜单 → 工具 → 插件）。
    3. 点击右上角的齿轮图标（⚙），选择 “Install Plugin From File…”。
    4. 选择下载好的 .xpi 文件。
 
 ### 更新
-   1. 打开 Zotero 插件界面（菜单 --> 工具 --> 插件）。
+   1. 打开 Zotero 插件界面（菜单 → 工具 → 插件）。
    2. 点击右上角的齿轮图标（⚙），选择 “Check for updates”。
 
 使用
@@ -56,24 +56,25 @@ Attachment Scanner（Zotero v.7.0+ 附件扫描器）
 1. 在 “工具” 菜单中选择 “扫描附件根目录中的多余文件”。仅当设置了附件根目录时，该菜单项才可用。
 2. 在 “工具” 菜单中点击 “取消附件扫描” 可取消。
 > [!NOTE]
-> 该功能仅扫描并把文件列表复制到剪贴板，不会删除任何文件。*没有计划* 添加文件删除功能，因为这会造成不可逆的数据丢失。
+> 该功能仅扫描并把文件列表复制到剪贴板，不会删除任何文件。我*没有计划* 添加文件删除功能，因为这会造成不可逆的数据丢失。
 
 ### 添加栏位
 1. 右键点击条目列表表头，在弹出菜单中选择 “附件大小” 或 “附件数目”。
-<center><img src="/others/columns.png" alt="Add columns" width="50%"/></center>
+<center><img src="/others/columns.zh-CN.png" alt="Add columns" width="50%"/></center>
 
 ### 设置
-详见 [此处](https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md)。
-![Preference window](/others/preference.png?raw=true "Preference window")
+详见 [此处](https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.zh-CN.md)。
+![Preference window](/others/preference.zh-CN.png?raw=true "Preference window")
 
 技术说明
 -----
-1. Zotero 的附件分为常规文件附件和非文件附件。“PubMed entry” 附件属于非文件附件。
-2. 每个文件附件都有一个 “content type”，类似于 [MIME 类型](https://en.wikipedia.org/wiki/Media_type)，主要由文件扩展名决定。“同类重复附件” 指多个具有相同 content type 的文件，例如两个 PDF 文件或三个 .xlsx 文件。但 PDF 文件和 .xlsx 文件不算重复，因为 content type 不同。
+1. Zotero 的附件分为 “常规文件附件” 和 “非文件附件”。“PubMed entry” 附件属于非文件附件。
+2. 每个文件附件都有一个 “內容类型”，类似于 [MIME 类型](https://en.wikipedia.org/wiki/Media_type)，主要由文件扩展名决定。“同类重复附件” 指多个具有相同 content type 的文件，例如两个 PDF 文件或三个 .xlsx 文件。但 PDF 文件和 .xlsx 文件不算重复，因为 content type 不同。
 3. Zotero 存在一个 bug：右键菜单首次显示时图标不会出现。插件无法修复此问题。
 4. Zotero 在 Mac 上存在一个 bug：主窗口关闭后重新打开时，部分主菜单项会消失或丢失图标。此问题已由本插件修复。
 5. Zotero 有一个设置项：“在从网页创建条目时自动截取快照”。关闭它可以阻止创建网页快照。
 6. 某些文库条目有多个附件指向同一文件。本插件包含一个删除这些重复附件的菜单命令。默认情况下该命令是隐藏的，因为如果安装了 **[ZotMoov](https://github.com/wileyyugioh/zotmoov)** 且开启了其 “Auto Delete External Linked Files” 功能，使用该命令会导致 **文件丢失**。要显示该菜单命令，请在 Zotero 的 [配置编辑器](https://www.zotero.org/support/preferences/hidden_preferences) 中将 `extensions.attachmentscanner.show_remove_same_file` 设为 `true`。强烈建议用户在使用完毕后将该选项改回 `false`。
 > [!CAUTION]
 > **相同文件移除** 功能绝不能与任何具备自动删除文件功能的插件同时使用。扫描期间，本插件只会将重复附件移入回收站，因此最初不会丢失任何文件。但清空回收站时，**ZotMoov** 会从磁盘删除该文件，从而导致意外的文件丢失。
+
 7. 插件可以为含已导入 Zotero 存储的附件的条目添加标签（默认：`#stored`），为含链接附件的条目添加标签（默认：`#linked`）。该功能默认关闭并隐藏。要开启，请在 Zotero 的 [配置编辑器](https://www.zotero.org/support/preferences/hidden_preferences) 中将 `extensions.attachmentscanner.check_link_mode` 设为 `true`。修改 `extensions.attachmentscanner.tag_stored` 和 `extensions.attachmentscanner.tag_linked` 可使用自定义标签。

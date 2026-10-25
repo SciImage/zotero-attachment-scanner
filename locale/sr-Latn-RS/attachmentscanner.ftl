@@ -46,6 +46,10 @@ attachmentscanner-scan-duplicates =
 attachmentscanner-ignore-file-masks = Zanemari datoteke čiji nazivi sadrže
 attachmentscanner-masks-hint =
     .placeholder = Više regularnih izraza: abc; [Dd]ef; /si/i
+attachmentscanner-use-type-filter =
+    .label = Iskoristite specifične vrste stavki
+attachmentscanner-type-filter-hint =
+    .placeholder = Unesite vrste stavki razdvojene zarezima
 attachmentscanner-remove-pubmed-entry =
     .label = Ukloni sve priloge „PubMed entry“
 attachmentscanner-remove-snapshot =
@@ -78,4 +82,3 @@ attachmentscanner-tag-nonfile = Prilozi koji nisu datoteke:
 attachmentscanner-use-zss-tags = Koristi izvorne oznake dodatka „Zotero Storage Scanner“ (engleski)
 attachmentscanner-use-simple-tags = Koristi jednostavne oznake
 attachmentscanner-use-emoji-tags = Koristi oznake sa emotikonima
-

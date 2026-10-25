@@ -1,7 +1,7 @@
 Attachment Scanner (for Zotero v.7.0+)
 =====
 
-**English** | [简体中文](README.zh-CN.md)
+**English** | [繁體中文](README.zh-TW.md) | [简体中文](README.zh-CN.md)
 
 **Attachment Scanner** is a **[Zotero](https://www.zotero.org/)** plugin designed to scan attachments and add tags to items with no, missing, or duplicate attachments. It functions similarly to the **[Zotero Storage Scanner](https://github.com/retorquere/zotero-storage-scanner)** plugin but is compatible with Zotero v.7.0. Several attachment-related features have been introduced through updates, including real-time monitoring, orphan file scanning, snapshot removal, and customizable columns.
 
@@ -37,12 +37,12 @@ Installation
 -----
 ### New Installation
    1. Download the .xpi file from [the latest release](https://github.com/SciImage/zotero-attachment-scanner/releases/latest) (Firefox users: Right click and save the file).
-   2. Open the Zotero plugins screen (Menu --> Tools --> Plugins).
+   2. Open the Zotero plugins screen (Menu → Tools → Plugins).
    3. Click the gear icon (⚙) in the top-right corner and select “Install Plugin From File…”.
    4. Choose the downloaded .xpi file.
 
 ### Update
-   1. Open the Zotero plugins screen (Menu --> Tools --> Plugins).
+   1. Open the Zotero plugins screen (Menu → Tools → Plugins).
    2. Click the gear icon (⚙) in the top-right corner and select “Check for updates”.
 
 Usage
@@ -76,4 +76,5 @@ Technical Notes
 6. Some library items have multiple attachments linking to the same file. The plugin includes a menu command to delete these duplicates. By default, this command is hidden because it can cause **FILE LOSS** if **[ZotMoov](https://github.com/wileyyugioh/zotmoov)** is installed and its “Auto Delete External Linked Files” feature is enabled. To display the menu command, set `extensions.attachmentscanner.show_remove_same_file` to `true` in Zotero's [Config Editor](https://www.zotero.org/support/preferences/hidden_preferences). It is strongly recommended that users set this option back to `false` after using it.
 > [!CAUTION]
 > **Identical file removal** should never be used alongside any plugins with automatic file-deleting functions. During scanning, this plugin only moves the duplicated attachments to the Trash, so no files are lost initially. However, when the Trash is emptied, **ZotMoov** will delete the file from the disk, leading to unexpected file loss.
+
 7. The plugin can add a tag (default: `#stored`) to items with attachment(s) imported to Zotero's storage, and a tag (default: `#linked`) to items with linked attachment(s). The function is disabled and hidden by default. To turn it on, set `extensions.attachmentscanner.check_link_mode` to `true` in Zotero's [Config Editor](https://www.zotero.org/support/preferences/hidden_preferences). Change `extensions.attachmentscanner.tag_stored` and `extensions.attachmentscanner.tag_linked` to use customized tags.
