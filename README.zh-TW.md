@@ -64,11 +64,11 @@ Attachment Scanner（Zotero v.7.0+ 附加檔掃描器）
 
 ### 新增欄位
 1. 在項目清單標題列按右鍵，勾選「附加檔大小」或「附加檔數目」。
-<center><img src="/others/columns.zh-TW.png" alt="Add columns" width="50%"/></center>
+<center><img src="/others/columns.zh-TW.png" alt="新增欄位" width="50%"/></center>
 
 ### 設定
 請參閱：[此处](https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.zh-TW.md)。
-![Preference window](/others/preference.zh-TW.png?raw=true "Preference window")
+![Preference window](/others/preference.zh-TW.png?raw=true "設定")
 
 ## 技術說明
 1. Zotero 的附加檔分為「檔案附加檔」與「非檔案附加檔」兩類。「PubMed entry」屬於非檔案附加檔。

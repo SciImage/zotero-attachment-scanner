@@ -3,7 +3,7 @@ Attachment Scanner Settings
 
 **English** | [繁體中文](preference_help.zh-TW.md) | [简体中文](preference_help.zh-CN.md)
 
-<center><img src="preference.png" alt="Add columns" width="50%"/></center>
+<center><img src="preference.png" alt="Preference" width="80%"/></center>
 
 Scanning Options
 -------

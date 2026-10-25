@@ -3,7 +3,7 @@
 
 [English ](preference_help.md) | [繁體中文](preference_help.zh-TW.md) | **简体中文**
 
-<center><img src="preference.zh-CN.png" alt="Add columns" width="50%"/></center>
+<center><img src="preference.zh-CN.png" alt="设置" width="80%"/></center>
 
 扫描选项
 -------

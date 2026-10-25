@@ -1,9 +1,9 @@
-附加檔掃描器設置
+附加檔掃描器設定
 =======
 
 [English ](preference_help.md) | **繁體中文** | [简体中文](preference_help.zh-CN.md)
 
-<center><img src="preference.zh-TW.png" alt="Add columns" width="50%"/></center>
+<center><img src="preference.zh-TW.png" alt="設定" width="80%"/></center>
 
 掃描選項
 -------
