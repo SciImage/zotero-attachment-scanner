@@ -1,3 +1,4 @@
+
 <linkset>
   <html:link rel="localization" href="attachmentscanner.ftl"/>
 </linkset>
@@ -8,18 +9,23 @@
       <label><html:h2 label="" data-l10n-id="attachmentscanner-section-scanning"/></label>
       <checkbox native="true" id="attachmentscanner_cb_nsrc" preference="extensions.attachmentscanner.scan_nosource" data-l10n-id="attachmentscanner-scan-nosource" />
       <checkbox native="true" id="attachmentscanner_cb_nfile" preference="extensions.attachmentscanner.scan_nonfiles" data-l10n-id="attachmentscanner-scan-nonfiles" />
-      <checkbox native="true" id="attachmentscanner_cb_dupl" preference="extensions.attachmentscanner.scan_duplicates" data-l10n-id="attachmentscanner-scan-duplicates" oncommand="Zotero.AttachmentScanner.duplicateSettingChanged();" />
+      <checkbox native="true" id="attachmentscanner_cb_dupl" preference="extensions.attachmentscanner.scan_duplicates" data-l10n-id="attachmentscanner-scan-duplicates" oncommand="Zotero.AttachmentScanner.prefEnableSettigs('cb_dupl', 'file_masks');" />
       <hbox align="center" style="margin-left: 28px;">
         <label for="attachmentscanner_file_masks" data-l10n-id="attachmentscanner-ignore-file-masks"/>
         <html:input type="text" id="attachmentscanner_file_masks" data-l10n-id="attachmentscanner-masks-hint" preference="extensions.attachmentscanner.ignored_file_masks" style="flex: 1;"/>
         <label is="zotero-text-link" id="attachmentscanner_help1" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#scan-items-for-duplicate-same-type-attachments" style="maring-right: 8px; margin-left: 2px; text-decoration: none;">?</label>
+      </hbox>
+      <hbox align="center">
+        <checkbox native="true" id="attachmentscanner_use_type_filter" preference="extensions.attachmentscanner.use_item_type_filter" data-l10n-id="attachmentscanner-use-type-filter" oncommand="Zotero.AttachmentScanner.prefEnableSettigs('use_type_filter', 'type_filter');" />
+        <html:input type="text" id="attachmentscanner_type_filter" data-l10n-id="attachmentscanner-type-filter-hint" preference="extensions.attachmentscanner.item_type_filter" style="flex: 1;"/>
+        <label is="zotero-text-link" id="attachmentscanner_help2" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#exclude-specific-item-types" style="maring-right: 8px; margin-left: 2px; text-decoration: none;">?</label>
       </hbox>
       <checkbox native="true" id="attachmentscanner_cb_nozs" preference="extensions.attachmentscanner.skip_zotero_storage" data-l10n-id="attachmentscanner-skip-zetero-storage" />
       <checkbox native="true" id="attachmentscanner_cb_rmpm" preference="extensions.attachmentscanner.remove_pubmed_entry" data-l10n-id="attachmentscanner-remove-pubmed-entry" />
       <checkbox native="true" id="attachmentscanner_cb_rmss" preference="extensions.attachmentscanner.remove_snapshot" data-l10n-id="attachmentscanner-remove-snapshot" />
       <hbox align="center">
         <checkbox native="true" id="attachmentscanner_cb_rmbk" preference="extensions.attachmentscanner.remove_broken" data-l10n-id="attachmentscanner-remove-broken" />
-        <label is="zotero-text-link" id="attachmentscanner_help2" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#remove-missing-attachments" style="margin-left: 6px; text-decoration: none;">?</label>
+        <label is="zotero-text-link" id="attachmentscanner_help3" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#remove-missing-attachments" style="margin-left: 6px; text-decoration: none;">?</label>
       </hbox>
     </vbox>
   </groupbox>
@@ -29,8 +35,8 @@
       <label><html:h2 label="" data-l10n-id="attachmentscanner-section-more"/></label>
       <checkbox native="true" id="attachmentscanner_cb_mon" preference="extensions.attachmentscanner.monitor_attachments" data-l10n-id="attachmentscanner-monitor-change" />
       <hbox align="center">
-        <checkbox native="true" id="attachmentscanner_cb_nscol" preference="extensions.attachmentscanner.enable_size_column" data-l10n-id="attachmentscanner-enable-size-column" oncommand="Zotero.AttachmentScanner.enableSizeColumnChanged();" />
-        <label is="zotero-text-link" id="attachmentscanner_help3" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#enable-attachment-size-column" style="margin-left: 6px; text-decoration: none;">?</label>
+        <checkbox native="true" id="attachmentscanner_cb_nscol" preference="extensions.attachmentscanner.enable_size_column" data-l10n-id="attachmentscanner-enable-size-column" oncommand="Zotero.AttachmentScanner.prefEnableSettigs('cb_nscol', 'cb_mono');" />
+        <label is="zotero-text-link" id="attachmentscanner_help4" href="https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md#enable-attachment-size-column" style="margin-left: 6px; text-decoration: none;">?</label>
       </hbox>
       <hbox style="margin-left: 28px;">
         <checkbox native="true" id="attachmentscanner_cb_mono" preference="extensions.attachmentscanner.monospace_font" data-l10n-id="attachmentscanner-monospace-font" />

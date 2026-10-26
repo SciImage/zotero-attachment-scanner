@@ -1,5 +1,13 @@
 # Attachment Scanner Change log
 
+## 0.6.0, 2026-10-26
+- Added an option to exclude items of specific types from checking.
+- Changed: The Attachment Size column now displays the size of attachments that do not have a parent item.
+- Fixed an issue where monitor unregistration was not always performed reliably. Additional validation checks have been added.
+- Added a Serbian (Latin) translation (thanks to Kadzo).
+- Added Traditional Chinese and Simplified Chinese README.md files (thanks to ouyangjiahong26).
+- Added Traditional Chinese and Simplified Chinese preference help documentation.
+
 ## 0.5.1, 2026-07-29
 - Add an option to skip scanning attachments in Zotero Storage.
 

@@ -60,7 +60,7 @@ Usage
 
 ### Add columns
 1. Right-click on the header of the item table, select “Attachment Size” or “Attachment #” from the pop-up menu.
-<center><img src="/others/columns.png" alt="Add columns" width="50%"/></center>
+<center><img src="/others/columns.png" alt="Add columns" width="30%"/></center>
 
 ### Settings
 See [here](https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md)  for details.

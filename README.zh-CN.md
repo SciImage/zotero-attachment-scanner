@@ -60,7 +60,7 @@ Attachment Scanner（Zotero v.7.0+ 附件扫描器）
 
 ### 添加栏位
 1. 右键点击条目列表表头，在弹出菜单中选择 “附件大小” 或 “附件数目”。
-<center><img src="/others/columns.zh-CN.png" alt="添加栏位" width="50%"/></center>
+<center><img src="/others/columns.zh-CN.png" alt="添加栏位" width="30%"/></center>
 
 ### 设置
 详见 [此处](https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.zh-CN.md)。

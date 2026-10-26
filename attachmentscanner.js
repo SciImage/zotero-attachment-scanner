@@ -63,6 +63,24 @@ AttachmentScanner.readPref = function() {
     this.check_link_mode    = this.getPref("check_link_mode");
     this.tagLinked          = this.getPrefDefault("tag_linked",   "#linked");
     this.tagStored          = this.getPrefDefault("tag_stored",   "#stored");
+    this.getPrefItemTypeFilters();
+}
+
+AttachmentScanner.getPrefItemTypeFilters = function() {
+    /* defined item types:
+        annotation, attachment, document, note
+        artwork, audioRecording, bill, blogPost, book, bookSection, case, computerProgram, conferencePaper, dataset,
+        dictionaryEntry, email, encyclopediaArticle, film, forumPost, hearing, instantMessage, interview, journalArticle, letter,
+        magazineArticle, manuscript, map, newspaperArticle, patent, podcast, preprint, presentation, radioBroadcast, report,
+        standard, statute, thesis, tvBroadcast, videoRecording, webpage,
+    */
+    if (this.getPref("use_item_type_filter")) {
+        let s = this.getPrefDefault("item_type_filter", "default").trim();
+        if (s == "default")
+             s = "annotation, attachment, note, blogPost, computerProgram, email, forumPost, instantMessage, podcast, radioBroadcast, tvBroadcast, webpage";
+        this.itemTypeFilter = s.toLowerCase().split(',').map(str => str.trim()).filter(str => str !== "");
+    } else this.itemTypeFilter = [];
+    // log(this.itemTypeFilter.toString());
 }
 
 // === Change UI elements based on state/settings ===
@@ -141,7 +159,7 @@ AttachmentScanner.preferencesChanged = function() {
     if (this.scanningState == 0 &&
         (this.tagNosource  != old_tagNosource  || this.tagBroken  != old_tagBroken ||
          this.tagDuplicate != old_tagDuplicate || this.tagNonfile != old_tagNonfile)) {
-        log("Renaming changed tags...");
+        // log("Renaming changed tags...");
         this.setState(1);
 
         try {
@@ -156,12 +174,14 @@ AttachmentScanner.preferencesChanged = function() {
         } finally {
             this.setState(0);
         }
-        log("Tags renamed");
+        // log("Tags renamed");
     }
 
     // Update menu items
+    this.setItemMonitor(this.monitorAttachments);
     this.updateHiddenMenuItem(Zotero.getMainWindow());
     this.registerSizeColumn(this.enableSizeColumn);
+    this.getPrefItemTypeFilters();
 };
 
 AttachmentScanner.fontChanged = function() {
@@ -176,19 +196,11 @@ AttachmentScanner.fontChanged = function() {
     }
 }
 
-AttachmentScanner.duplicateSettingChanged = function() {
+AttachmentScanner.prefEnableSettigs = function(main, sub) {
     const doc = this.preferenceDocument;
     if (doc) {
-        var elm = doc.getElementById("attachmentscanner_cb_dupl");
-        doc.getElementById("attachmentscanner_file_masks").disabled = elm.disabled || !elm.checked;
-    }
-}
-
-AttachmentScanner.enableSizeColumnChanged = function() {
-    const doc = this.preferenceDocument;
-    if (doc) {
-        var elm = doc.getElementById("attachmentscanner_cb_nscol");
-        doc.getElementById("attachmentscanner_cb_mono").disabled = !elm.checked;
+        var elm = doc.getElementById('attachmentscanner_' + main);
+        doc.getElementById('attachmentscanner_' + sub).disabled = elm.disabled || !elm.checked;
     }
 }
 
@@ -235,7 +247,7 @@ AttachmentScanner.registerSizeColumn = function(enabled) {
                 let totalSize = 0;
                 if (item.isFileAttachment()) {
                     let parent = Zotero.Items.get(item.parentID);
-                    if (parent.numAttachments(false) > 1)
+                    if (!parent || parent.numAttachments(false) > 1)
                         try {
                             totalSize = this.getFileSize(item.getFilePath());
                         } catch {
@@ -341,7 +353,7 @@ AttachmentScanner.addToWindow = function(window) {
 // === Attachment monitor ===
 
 AttachmentScanner.setItemMonitor = function(enabled) {
-    log('Set attachment monitor to ' + enabled);
+    // log('Set attachment monitor to ' + enabled);
     if (enabled && !this.itemNotifierID)
         this.itemNotifierID = Zotero.Notifier.registerObserver(this.onItemChange, ['item']);
     else if (!enabled && this.itemNotifierID) {
@@ -352,7 +364,7 @@ AttachmentScanner.setItemMonitor = function(enabled) {
 
 AttachmentScanner.onItemChange = {
     notify: async function(event, type, ids, extraData) { // string, string, Array<string>, ibject
-        if (event == "modify") {
+        if (this.monitorAttachments && event == "modify") {
             // log("Checking " + event + " with " + ids.length + " items");
             for (id of ids) {
                 let item = await Zotero.Items.getAsync(id);
@@ -372,6 +384,8 @@ AttachmentScanner.checkAttachements = async function(item, skipSomeActions) { //
     }
 
     await item.loadAllData();
+    if (this.itemTypeFilter.includes(item.itemType.toLowerCase()))  return;
+
     // Get all attachments
     let attachmentIDs = item.getAttachments();
     let attachTypes = [];
@@ -444,7 +458,7 @@ AttachmentScanner.checkAttachements = async function(item, skipSomeActions) { //
             }
         } else {
             // sets hasNonfiles, pubmedEntryID
-            //log(item.getDisplayTitle(false) + " has non-file attachment: '" + attachment.getDisplayTitle(false) +
+            // log(item.getDisplayTitle(false) + " has non-file attachment: '" + attachment.getDisplayTitle(false) +
             //     "' of mode " + attachment.attachmentLinkMode + " and type " + attachment.attachmentContentType);
             if (this.removePubmedEntry && attachment.getDisplayTitle(false) == "PubMed entry")
                 pubmedEntryID = attachmentID;
@@ -452,12 +466,12 @@ AttachmentScanner.checkAttachements = async function(item, skipSomeActions) { //
         }
     }
     if (pubmedEntryID) {
-        log('Trash ' + Zotero.Items.get(pubmedEntryID).getDisplayTitle(false));
+        // log('Trash ' + Zotero.Items.get(pubmedEntryID).getDisplayTitle(false));
         Zotero.Items.trashTx(pubmedEntryID);
         changed = true;
     }
     if (snapshotID && this.removeSnapshot && hasPDF) {
-        log('Trash ' + Zotero.Items.get(snapshotID).getDisplayTitle(false));
+        // log('Trash ' + Zotero.Items.get(snapshotID).getDisplayTitle(false));
         Zotero.Items.trashTx(snapshotID);
         changed = true;
     }
@@ -484,6 +498,7 @@ AttachmentScanner.checkAttachements = async function(item, skipSomeActions) { //
     }
 
     if (changed) item.saveTx();
+    // if (changed) log(item.itemType + ": " + item.title);
 }
 
 // === Scanning ==
@@ -503,7 +518,7 @@ AttachmentScanner.scanItems = async function(win, items, proc) {
     await this.waitUntilfinishRename();  // even without preference window open, there is a slight chance that renaming is ongonig
 
     // Disable/enable some functions
-    log("Start scan");
+    // log("Start scan");
     this.setState(2);
     this.shouldCancelScan = false;
 
@@ -524,7 +539,7 @@ AttachmentScanner.scanItems = async function(win, items, proc) {
             await proc(aItem);
         }
     } finally {
-        log("Clean up scan");
+        // log("Clean up scan");
         this.closeProgressWindow();
         this.setState(0);
     }

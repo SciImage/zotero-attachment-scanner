@@ -18,3 +18,5 @@ pref("extensions.attachmentscanner.show_remove_same_file", false);
 pref("extensions.attachmentscanner.check_link_mode", false);
 pref("extensions.attachmentscanner.tag_linked", "#linked");
 pref("extensions.attachmentscanner.tag_stored", "#stored");
+pref("extensions.attachmentscanner.use_item_type_filter", true);
+pref("extensions.attachmentscanner.item_type_filter", "default");
