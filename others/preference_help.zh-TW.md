@@ -32,7 +32,7 @@
 如果未設置，則默認為 `default`，對應：
 - `annotation, attachment, note, blogPost, computerProgram, email, forumPost, instantMessage, podcast, radioBroadcast, tvBroadcast, webpage`
 
-請使用 Zotero 的內部項目類型名稱，並且不要包含空格。更多信息請參閱[Zotero官方文檔](https://www.zotero.org/support/kb/item_types_and_fields)。
+請使用 Zotero 的內部項目類型名稱，並且不要包含空格。更多信息請參閱 [Zotero 官方文檔](https://www.zotero.org/support/kb/item_types_and_fields)。
 - 一般不建議排除：`book`, `bookSection`, `conferencePaper`, `document`, `journalArticle`, `manuscript`, `preprint`, `report`, `standard`, `thesis`
 - 可以排除，但通常不建議排除：`bill`, `case`, `dictionaryEntry`, `encyclopediaArticle`, `hearing`, `interview`, `letter`, `magazineArticle`, `newspaperArticle`, `patent`, `statute`
 - Zotero 內部使用的類型：`annotation`, `attachment`, `note`
