@@ -3,7 +3,7 @@ Attachment Scanner Settings
 
 **English** | [繁體中文](preference_help.zh-TW.md) | [简体中文](preference_help.zh-CN.md)
 
-<center><img src="preference.png" alt="Preference" width="80%"/></center>
+<center><img src="preference.png" alt="Preference" width="75%"/></center>
 
 Scanning Options
 -------
@@ -28,7 +28,7 @@ Attachments with file names matching these masks will be ignored during duplicat
 Each Zotero item has an associated [item type](https://www.zotero.org/support/kb/item_types_and_fields). Some item types may include a URL but not an attachment. This field specifies the item types to exclude from checking, separated by commas. If not specified, the value defaults to `default`, which corresponds to
 - `annotation, attachment, note, blogPost, computerProgram, email, forumPost, instantMessage, podcast, radioBroadcast, tvBroadcast, webpage`
 
-Use Zotero's internal item type names and do not include spaces. Zotero defines the following item types. See the [ See the official documentation](https://www.zotero.org/support/kb/item_types_and_fields) for details.
+Use Zotero's internal item type names and do not include spaces. Zotero defines the following item types. See the [Zotero's documentation](https://www.zotero.org/support/kb/item_types_and_fields) for details.
 
 - You should generally not exclude: `book`, `bookSection`, `conferencePaper`, `document`,  `journalArticle`, `manuscript`, `preprint`, `report`, `standard`, `thesis`
 - You may exclude, but generally should not: `bill`, `case`, `dictionaryEntry`, `encyclopediaArticle`, `hearing`, `interview`, `letter`, `magazineArticle`, `newspaperArticle`, `patent`, `statute`

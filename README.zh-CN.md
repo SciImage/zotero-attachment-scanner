@@ -64,7 +64,7 @@ Attachment Scanner（Zotero v.7.0+ 附件扫描器）
 
 ### 设置
 详见 [此处](https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.zh-CN.md)。
-![Preference window](/others/preference.zh-CN.png?raw=true "设置")
+<center><img src="/others/preference.zh-CN.png" alt="设置" width="75%"/></center>
 
 技术说明
 -----

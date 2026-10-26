@@ -68,7 +68,7 @@ Attachment Scanner（Zotero v.7.0+ 附加檔掃描器）
 
 ### 設定
 請參閱：[此处](https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.zh-TW.md)。
-![Preference window](/others/preference.zh-TW.png?raw=true "設定")
+<center><img src="/others/preference.zh-TW.png" alt="設定" width="75%"/></center>
 
 ## 技術說明
 1. Zotero 的附加檔分為「檔案附加檔」與「非檔案附加檔」兩類。「PubMed entry」屬於非檔案附加檔。

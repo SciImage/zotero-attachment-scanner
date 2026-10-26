@@ -3,7 +3,7 @@
 
 [English ](preference_help.md) | [繁體中文](preference_help.zh-TW.md) | **简体中文**
 
-<center><img src="preference.zh-CN.png" alt="设置" width="80%"/></center>
+<center><img src="preference.zh-CN.png" alt="设置" width="75%"/></center>
 
 扫描选项
 -------
@@ -32,7 +32,7 @@
 如果未设置，则默认为 `default`，对应：
 - `annotation, attachment, note, blogPost, computerProgram, email, forumPost, instantMessage, podcast, radioBroadcast, tvBroadcast, webpage`
 
-请使用 Zotero 的内部项目类型名称，并且不要包含空格。更多信息请参阅 Zotero 官方文档。
+请使用 Zotero 的内部项目类型名称，并且不要包含空格。更多信息请参阅[Zotero官方文档](https://www.zotero.org/support/kb/item_types_and_fields)。
 - 一般不建议排除：`book`, `bookSection`, `conferencePaper`, `document`, `journalArticle`, `manuscript`, `preprint`, `report`, `standard`, `thesis`
 - 可以排除，但通常不建议排除：`bill`, `case`, `dictionaryEntry`, `encyclopediaArticle`, `hearing`, `interview`, `letter`, `magazineArticle`, `newspaperArticle`, `patent`, `statute`
 - Zotero 内部使用的类型：`annotation`, `attachment`, `note`

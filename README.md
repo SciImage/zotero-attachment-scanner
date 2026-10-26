@@ -64,7 +64,7 @@ Usage
 
 ### Settings
 See [here](https://github.com/SciImage/zotero-attachment-scanner/blob/main/others/preference_help.md)  for details.
-![Preference window](/others/preference.png?raw=true "Preference window")
+<center><img src="/others/preference.png" alt="Preference" width="75%"/></center>
 
 Technical Notes
 -----
