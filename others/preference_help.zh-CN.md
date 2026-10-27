@@ -3,7 +3,7 @@
 
 [English ](preference_help.md) | [繁體中文](preference_help.zh-TW.md) | **简体中文**
 
-<center><img src="preference.zh-CN.png" alt="设置" width="75%"/></center>
+<div align="center"><img src="/others/preference.zh-CN.png" alt="设置" width="800px"/></div>
 
 扫描选项
 -------
