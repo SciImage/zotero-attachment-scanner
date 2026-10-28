@@ -1,5 +1,8 @@
 # Attachment Scanner Change log
 
+## 0.6.1, 2026-10-28
+- Fixed a bug that causes real-time monitoring to stop working.
+
 ## 0.6.0, 2026-10-26
 - Added an option to exclude items of specific types from checking.
 - Changed: The Attachment Size column now displays the size of attachments that do not have a parent item.

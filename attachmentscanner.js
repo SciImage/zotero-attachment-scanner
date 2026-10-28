@@ -364,7 +364,7 @@ AttachmentScanner.setItemMonitor = function(enabled) {
 
 AttachmentScanner.onItemChange = {
     notify: async function(event, type, ids, extraData) { // string, string, Array<string>, ibject
-        if (this.monitorAttachments && event == "modify") {
+        if (Zotero.AttachmentScanner.monitorAttachments && event == "modify") {
             // log("Checking " + event + " with " + ids.length + " items");
             for (id of ids) {
                 let item = await Zotero.Items.getAsync(id);
